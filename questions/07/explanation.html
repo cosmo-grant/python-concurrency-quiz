@@ -1,0 +1,7 @@
+Process objects run in separate Python processes, each with their own GIL.
+
+So they can run in parallel on multicore machines.
+
+For CPU-bound processes, running in parallel helps.
+
+The basic API is similar to <code>threading</code>.

@@ -1,0 +1,5 @@
+There are three threads in play: main, <code>thread1</code>, <code>thread2</code>.
+
+The interpreter pauses the running thread regularly, releasing the GIL, and the OS decides which to run next.
+
+<code>thread1</code> and <code>thread2</code> are CPU-bound, so interleaving doesn't help.

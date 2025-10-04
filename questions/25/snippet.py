@@ -1,0 +1,18 @@
+import asyncio
+from time import sleep
+
+
+async def file_io():
+    sleep(4)
+    print("done")
+
+
+async def main():
+    await asyncio.gather(
+        file_io(),
+        asyncio.sleep(4),
+    )
+    print("here")
+
+
+asyncio.run(main())

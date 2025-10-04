@@ -1,0 +1,3 @@
+<~3s>
+in foo
+in bar
