@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en-UK">
+  <head>
+    <meta charset="utf-8" />
+    <title>Python Concurrency Quiz</title>
+    <meta name="author" content="Cosmo Grant" />
+    <meta
+      name="description"
+      content="Test your knowledge of Python concurrency with this interactive quiz."
+    />
+  </head>
+
+  <body>
+    <div>
+      <div>
+        <span>Score: <span id="score-digit">0</span></span>
+      </div>
+      <div>
+        <div id="question-text"></div>
+        <div>
+          <pre><code id="code-display"></code></pre>
+        </div>
+      </div>
+
+      <div id="explanation-section">
+        <div id="explanation-text"></div>
+      </div>
+
+      <div>
+        <button>
+          <pre><samp id="answer-0"></samp></pre>
+        </button>
+        <button>
+          <pre><samp id="answer-1"></samp></pre>
+        </button>
+        <button>
+          <pre><samp id="answer-2"></samp></pre>
+        </button>
+      </div>
+
+      <div>
+        <button id="next-btn">Next Question</button>
+      </div>
+
+      <div>
+        <button id="finish-btn">Finish</button>
+      </div>
+    </div>
+    <script src="questions.js"></script>
+    <script src="quiz.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+// Generated automatically. Do not edit.
+
+const QUESTIONS = [
+  {% for code, (answer0, answer1, answer2), correct, explanation in questions %}
+  {
+    code: `{{code}}`,
+    question: "Output?",
+    answers: [
+      `{{answer0}}`,
+      `{{answer1}}`,
+      `{{answer2}}`,
+    ],
+    correct: {{correct}},
+    explanation: `{{explanation}}`,
+  },
+  {% endfor %}
+];
