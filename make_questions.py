@@ -11,7 +11,8 @@ import random
 
 
 def main() -> None:
-    dirs = (path for path in Path("questions").iterdir() if path.is_dir())
+    dirs = [path for path in Path("questions").iterdir() if path.is_dir()]
+    dirs.sort()
     questions = []
     for dir in dirs:
         with open(dir / "snippet.py") as f:
