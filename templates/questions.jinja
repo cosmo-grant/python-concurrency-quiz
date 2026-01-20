@@ -1,10 +1,10 @@
 // Generated automatically. Do not edit.
 
 const QUESTIONS = [
-  {% for code, (answer0, answer1, answer2), correct, explanation in questions %}
+  {% for preface, code, (answer0, answer1, answer2), correct, explanation in questions %}
   {
+    preface: `{{preface}}`,
     code: `{{code}}`,
-    question: "Output?",
     answers: [
       `{{answer0}}`,
       `{{answer1}}`,

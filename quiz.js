@@ -11,7 +11,7 @@ class Quiz {
 
   initializeElements() {
     this.codeDisplay = document.getElementById("code-display");
-    this.questionText = document.getElementById("question-text");
+    this.prefaceText = document.getElementById("preface-text");
     this.scoreDigit = document.getElementById("score-digit");
     this.nextButton = document.getElementById("next-btn");
     this.answerButtons = [
@@ -40,7 +40,7 @@ class Quiz {
     this.codeDisplay.textContent = question.code;
     this.codeDisplay.removeAttribute("data-highlighted"); // else highlightjs skips re-highlighting
     hljs.highlightElement(this.codeDisplay);
-    this.questionText.textContent = question.question;
+    this.prefaceText.innerHTML = question.preface;
     this.answerButtons.forEach((button, index) => {
       button.textContent = question.answers[index];
     });

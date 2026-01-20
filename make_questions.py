@@ -25,10 +25,12 @@ def main() -> None:
             wrong_1 = f.read()
         with open(dir / "explanation.html") as f:
             explanation = f.read()
+        with open(dir / "preface.html") as f:
+            preface = f.read()
         answers = [output, wrong_0, wrong_1]
         random.shuffle(answers)
         correct = answers.index(output)
-        questions.append([code, answers, correct, explanation])
+        questions.append([preface, code, answers, correct, explanation])
 
     env = Environment(loader=FileSystemLoader("templates/"))
     template = env.get_template("questions.jinja")
