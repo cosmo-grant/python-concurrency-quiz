@@ -38,8 +38,9 @@ class Quiz {
     this.isAnswered = false;
 
     this.codeDisplay.textContent = question.code;
+    this.codeDisplay.removeAttribute("data-highlighted"); // else highlightjs skips re-highlighting
+    hljs.highlightElement(this.codeDisplay);
     this.questionText.textContent = question.question;
-
     this.answerButtons.forEach((button, index) => {
       button.textContent = question.answers[index];
     });
