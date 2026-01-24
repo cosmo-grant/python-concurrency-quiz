@@ -1,2 +1,1 @@
-<~3s>
-here
+<coroutine object foo at 0x100>

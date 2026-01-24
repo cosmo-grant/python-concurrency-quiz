@@ -1,4 +1,4 @@
-Futures encapsulate asynchronous calls.<br />
+Raising an exception is one way for a future to complete.<br />
 <br />
-<code>result()</code> gets the call's return value, blocking until it's
-available.
+<code>wait()</code> blocks until the receiver completes, but doesn't raise the
+exception.

@@ -1,5 +1,5 @@
-The <code>ThreadPoolExecutor</code> class provides a high-level API for
-executing callables in multiple threads.<br />
+Process objects run in separate Python processes, each with their own GIL.<br />
 <br />
-The context manager's <code>__exit__</code> blocks until the threads are done
-and the resources freed.
+So they can run in parallel on multicore machines.<br />
+<br />
+For CPU-bound processes, running in parallel helps.

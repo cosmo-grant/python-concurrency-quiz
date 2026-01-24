@@ -1,3 +1,5 @@
-in bar
-<~3s>
-in foo
+<~4s>
+here
+<~4s>
+here
+done

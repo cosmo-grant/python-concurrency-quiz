@@ -1,1 +1,2 @@
-<coroutine object foo at 0x100>
+in main
+in foo

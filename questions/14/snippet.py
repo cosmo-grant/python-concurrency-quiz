@@ -1,13 +1,15 @@
-from concurrent.futures import ThreadPoolExecutor
+import asyncio
 from time import sleep
 
 
-def io_bound(t):
-    sleep(t)
-    return t
+async def main():
+    bar = await foo()
+    print(bar)
 
 
-with ThreadPoolExecutor() as executor:
-    for res in executor.map(io_bound, (5, 3, 2)):
-        print(res)
-    print("here")
+async def foo():
+    sleep(3)
+    return "hello"
+
+
+asyncio.run(main())

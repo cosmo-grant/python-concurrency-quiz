@@ -1,12 +1,15 @@
 from threading import Thread
+from time import sleep
 
 
-def cpu_bound():
-    sum(i**2 for i in range(2**26))  # assume takes 3s
+def io_bound():
+    sleep(3)
     print("done")
 
 
-thread1, thread2 = Thread(target=cpu_bound), Thread(target=cpu_bound)
+thread1, thread2 = Thread(target=io_bound), Thread(target=io_bound)
 thread1.start()
 thread2.start()
+thread1.join()
+thread2.join()
 print("here")

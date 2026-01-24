@@ -1,15 +1,19 @@
-from concurrent.futures import ThreadPoolExecutor
+import asyncio
 from time import sleep
 
 
-def foo():
+async def main():
+    asyncio.create_task(foo())
+    asyncio.create_task(bar())
+
+
+async def foo():
     sleep(3)
-    raise Exception
+    print("in foo")
 
 
-with ThreadPoolExecutor() as executor:
-    f = executor.submit(foo)
-    try:
-        f.result()
-    except Exception:
-        print("here")
+async def bar():
+    print("in bar")
+
+
+asyncio.run(main())

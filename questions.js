@@ -2,6 +2,36 @@
 
 const QUESTIONS = [
   {
+    preface: `Let's warm up.<br />
+<br />
+What does this output?
+`,
+    code: `from time import sleep
+
+sleep(3)
+print("done")
+print("here")
+`,
+    answers: [
+      `NOT ME!
+`,
+      `<~3s>
+done
+here
+`,
+      `NOT ME!
+`,
+    ],
+    correct: 1,
+    explanation: `One process, one thread, no event loop.
+
+La dolce vita.
+`,
+  },
+
+  {
+    preface: `Now let's add some threads. Output?
+`,
     code: `from threading import Thread
 from time import sleep
 
@@ -16,31 +46,34 @@ thread1.start()
 thread2.start()
 print("here")
 `,
-    question: "Output?",
     answers: [
-      `TODO
+      `<~3s>
+here
+done
+done
+`,
+      `<~3s>
+done
+done
+here
 `,
       `here
 <~3s>
 done
 done
 `,
-      `TODO
-`,
     ],
-    correct: 1,
-    explanation: `There are three threads in play: main, <code>thread1</code>,
+    correct: 2,
+    explanation: `There are three threads in play: the main thread, <code>thread1</code>,
 <code>thread2</code>.<br />
 <br />
-The interpreter pauses the running thread regularly, releasing the GIL, and the
-OS decides which to run next.<br />
-<br />
-<code>thread1</code> and <code>thread2</code> are IO-bound, so interleaving
-helps.
+The main thread runs while the others are sleeping.
 `,
   },
 
   {
+    preface: `What if we <code>join()</code> them?
+`,
     code: `from threading import Thread
 from time import sleep
 
@@ -57,25 +90,32 @@ thread2.start()
 thread2.join()
 print("here")
 `,
-    question: "Output?",
     answers: [
+      `here
+<~3s>
+done
+done
+`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
-      `TODO
-`,
-      `TODO
+      `<~3s>
+done
+done
+here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<code>join()</code> blocks until the receiver completes.
 `,
   },
 
   {
+    preface: `Does re-ordering make a difference?
+`,
     code: `from threading import Thread
 from time import sleep
 
@@ -92,19 +132,25 @@ thread1.join()
 thread2.join()
 print("here")
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
       `<~3s>
 done
 done
 here
 `,
-      `TODO
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
+      `here
+<~3s>
+done
+done
 `,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<code>thread1.join()</code> blocks the main thread, but not
 <code>thread2</code>.<br />
 <br />
@@ -114,11 +160,13 @@ helps.
   },
 
   {
+    preface: `What if the threads are cpu-bound instead?
+`,
     code: `from threading import Thread
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**26))  # assume takes 3s
+    sum(i**2 for i in range(2**26))  # assume takes 3s of cpu
     print("done")
 
 
@@ -127,19 +175,24 @@ thread1.start()
 thread2.start()
 print("here")
 `,
-    question: "Output?",
     answers: [
+      `here
+<~3s>
+done
+done
+`,
       `here
 <~6s>
 done
 done
 `,
-      `TODO
-`,
-      `TODO
+      `<~6s>
+done
+done
+here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `There are three threads in play: main, <code>thread1</code>,
 <code>thread2</code>.<br />
 <br />
@@ -152,11 +205,13 @@ doesn't help.
   },
 
   {
+    preface: `Ok, let's <code>join()</code> again.
+`,
     code: `from threading import Thread
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**26))  # assume takes 3s
+    sum(i**2 for i in range(2**26))  # assume takes 3s of cpu
     print("done")
 
 
@@ -167,7 +222,6 @@ thread2.start()
 thread2.join()
 print("here")
 `,
-    question: "Output?",
     answers: [
       `<~3s>
 done
@@ -175,9 +229,15 @@ done
 done
 here
 `,
-      `TODO
+      `<~3s>
+done
+done
+here
 `,
-      `TODO
+      `here
+<~6s>
+done
+done
 `,
     ],
     correct: 0,
@@ -186,11 +246,13 @@ here
   },
 
   {
+    preface: `Does re-ordering make a difference?
+`,
     code: `from threading import Thread
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**26))  # assume takes 3s
+    sum(i**2 for i in range(2**26))  # assume takes 3s of cpu
     print("done")
 
 
@@ -201,10 +263,54 @@ thread1.join()
 thread2.join()
 print("here")
 `,
-    question: "Output?",
     answers: [
-      `TODO
+      `<~3s>
+done
+<~3s>
+done
+here
 `,
+      `<~6s>
+done
+done
+here
+`,
+      `here
+<~3s>
+done
+<~3s>
+done
+`,
+    ],
+    correct: 1,
+    explanation: `<code>thread1.join()</code> blocks the main thread, but not
+<code>thread2</code>.<br />
+<br />
+<code>thread1</code> and <code>thread2</code> are CPU-bound, so interleaving
+doesn't help.
+`,
+  },
+
+  {
+    preface: `This is just like the previous question, right?
+`,
+    code: `from threading import Thread
+
+
+def cpu_bound():
+    sum(range(2**26))  # assume takes 3s of cpu
+    print("done")
+
+
+thread1, thread2 = Thread(target=cpu_bound), Thread(target=cpu_bound)
+
+thread1.start()
+thread2.start()
+thread1.join()
+thread2.join()
+print("here")
+`,
+    answers: [
       `<~6s>
 done
 done
@@ -212,17 +318,24 @@ here
 `,
       `TODO
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
     ],
-    correct: 1,
-    explanation: `<code>thread1.join()</code> blocks the main thread, but not
-<code>thread2</code>.<br />
+    correct: 2,
+    explanation: `Careful!<br />
 <br />
-<code>thread1</code> and <code>thread2</code> are CPU-bound, so interleaving
-doesn't help.
+The interpreter won't pause a thread while it's running native code, like
+<code>sum()</code> does.
 `,
   },
 
   {
+    preface: `Let's swap threads for processes.
+`,
     code: `from multiprocessing import Process
 from time import sleep
 
@@ -233,17 +346,14 @@ def io_bound():
 
 
 if __name__ == "__main__":
-    # running on multicore machine
+    # assume running on multicore machine
     proc1, proc2 = Process(target=io_bound), Process(target=io_bound)
 
     proc1.start()
     proc2.start()
     print("here")
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
       `TODO
 `,
       `here
@@ -251,24 +361,26 @@ if __name__ == "__main__":
 done
 done
 `,
+      `TODO
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `Process objects run in separate Python processes, each with their own GIL.<br />
 <br />
 So they can run in parallel on multicore machines.<br />
 <br />
-For IO-bound targets, you could use threads instead.<br />
-<br />
-The basic API is similar to <code>threading</code>.
+For IO-bound targets, threads might be the better choice.
 `,
   },
 
   {
+    preface: `Just like Question 5, but with processes instead of threads.
+`,
     code: `from multiprocessing import Process
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**26))  # assume takes 3s
+    sum(i**2 for i in range(2**26))  # assume takes 3s of cpu
     print("done")
 
 
@@ -281,67 +393,33 @@ if __name__ == "__main__":
     proc2.join()
     print("here")
 `,
-    question: "Output?",
     answers: [
       `TODO
+`,
+      `<~6s>
+done
+done
+here
 `,
       `<~3s>
 done
 done
 here
 `,
-      `TODO
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `Process objects run in separate Python processes, each with their own GIL.<br />
 <br />
 So they can run in parallel on multicore machines.<br />
 <br />
-For CPU-bound processes, running in parallel helps.<br />
-<br />
-The basic API is similar to <code>threading</code>.
+For CPU-bound processes, running in parallel helps.
 `,
   },
 
   {
-    code: `from threading import Thread
-
-
-def cpu_bound():
-    sum(range(2**28))  # assume takes 4s
-    print("done")
-
-
-thread1, thread2 = Thread(target=cpu_bound), Thread(target=cpu_bound)
-
-thread1.start()
-thread2.start()
-thread1.join()
-thread2.join()
-print("here")
+    preface: `Starting and joining by hand is tricky. The standard library provides some
+helpful higher-level constructs. Know how they work?
 `,
-    question: "Output?",
-    answers: [
-      `TODO
-`,
-      `<~4s>
-done
-<~4s>
-done
-here`,
-      `TODO
-`,
-    ],
-    correct: 1,
-    explanation: `Careful!<br />
-<br />
-The interpreter doesn't pause a thread while it's running native code, like
-<code>sum()</code> does.
-`,
-  },
-
-  {
     code: `from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
@@ -354,96 +432,40 @@ def io_bound():
 with ThreadPoolExecutor() as executor:
     for _ in range(3):
         executor.submit(io_bound)
-    print("here")
+    print("foo")
+
+print("bar")
 `,
-    question: "Output?",
     answers: [
-      `here
+      `TODO
+`,
+      `<~4s>
+done
+<~4s>
+done
+<~4s>
+done
+here
+bar
+`,
+      `foo
 <~4s>
 done
 done
 done
-`,
-      `TODO
-`,
-      `TODO
+bar
+
 `,
     ],
-    correct: 0,
-    explanation: `The <code>ThreadPoolExecutor</code> class provides a high-level API for
-executing callables in multiple threads.<br />
-<br />
-The context manager's <code>__exit__</code> blocks until the threads are done
+    correct: 2,
+    explanation: `The context manager's <code>__exit__</code> blocks until the threads are done
 and the resources freed.
 `,
   },
 
   {
-    code: `from concurrent.futures import ThreadPoolExecutor
-from time import sleep
-
-
-def io_bound():
-    sleep(4)
-    print("done")
-
-
-with ThreadPoolExecutor() as executor:
-    for _ in range(3):
-        executor.submit(io_bound)
-
-print("here")
+    preface: `Can you predict the <code>Future</code>?
 `,
-    question: "Output?",
-    answers: [
-      `<~4s>
-done
-done
-done
-here
-`,
-      `TODO
-`,
-      `TODO
-`,
-    ],
-    correct: 0,
-    explanation: `The <code>ThreadPoolExecutor</code> class provides a high-level API for
-executing calls in multiple threads.<br />
-<br />
-The context manager's <code>__exit__</code> blocks until the threads are done
-and the resources freed.
-`,
-  },
-
-  {
-    code: `from concurrent.futures import ThreadPoolExecutor
-from time import sleep
-
-with ThreadPoolExecutor() as executor:
-    res = executor.submit(lambda: sleep(3))
-    print(res)
-
-print("here")
-`,
-    question: "Output?",
-    answers: [
-      `TODO
-`,
-      `<Future at 0x100 state=running>
-<~3s>
-here
-`,
-      `TODO
-`,
-    ],
-    correct: 1,
-    explanation: `<code>Future</code> objects encapsulate asynchronous calls, letting you queue
-them, query their state, get their results etc.
-`,
-  },
-
-  {
     code: `from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
@@ -458,102 +480,31 @@ with ThreadPoolExecutor() as executor:
     print(f.result())
     print("here")
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
-      `TODO
-`,
       `<~3s>
 42
 here
 `,
+      `Exception
+`,
+      `None 
+here
+`,
     ],
-    correct: 2,
-    explanation: `Futures encapsulate asynchronous calls.<br />
-<br />
+    correct: 0,
+    explanation: `<code>submit()</code> returns a <code>Future</code>.
+
+<code>Future</code>s encapsulate async calls, letting you queue them, query
+their state, get their results etc.
+
 <code>result()</code> gets the call's return value, blocking until it's
 available.
 `,
   },
 
   {
-    code: `from concurrent.futures import (
-    ThreadPoolExecutor,
-    as_completed,
-)
-from time import sleep
-
-
-def io_bound(t):
-    sleep(t)
-    return t
-
-
-with ThreadPoolExecutor() as executor:
-    futures = [
-        executor.submit(io_bound, 3),
-        executor.submit(io_bound, 1),
-        executor.submit(io_bound, 2),
-    ]
-    for f in as_completed(futures):
-        print(f.result())
-    print("here")
+    preface: `What if threads go bad?
 `,
-    question: "Output?",
-    answers: [
-      `TODO
-`,
-      `<~1s>
-1
-<~1s>
-2
-<~1s>
-3
-here
-`,
-      `TODO
-`,
-    ],
-    correct: 1,
-    explanation: ``,
-  },
-
-  {
-    code: `from concurrent.futures import ThreadPoolExecutor
-from time import sleep
-
-
-def io_bound(t):
-    sleep(t)
-    return t
-
-
-with ThreadPoolExecutor() as executor:
-    for res in executor.map(io_bound, (5, 3, 2)):
-        print(res)
-    print("here")
-`,
-    question: "Output?",
-    answers: [
-      `TODO
-`,
-      `TODO
-`,
-      `<~5s>
-5
-3
-2
-here
-`,
-    ],
-    correct: 2,
-    explanation: `<code>map()</code> submits the calls to the executor and returns an iterator
-which yields the results in the order submitted, blocking when necessary.
-`,
-  },
-
-  {
     code: `from concurrent.futures import ThreadPoolExecutor, wait
 from time import sleep
 
@@ -568,25 +519,29 @@ with ThreadPoolExecutor() as executor:
     wait((f,))
     print("here")
 `,
-    question: "Output?",
     answers: [
+      `<~3s>
+Exception
+`,
       `<~3s>
 here
 `,
-      `TODO
-`,
-      `TODO
+      `<~3s>
+None
+here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `Raising an exception is one way for a future to complete.<br />
 <br />
-<code>wait()</code> blocks until the future completes, but doesn't raise the
+<code>wait()</code> blocks until the receiver completes, but doesn't raise the
 exception.
 `,
   },
 
   {
+    preface: `Same or different?
+`,
     code: `from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
@@ -598,22 +553,22 @@ def foo():
 
 with ThreadPoolExecutor() as executor:
     f = executor.submit(foo)
-    try:
-        f.result()
-    except Exception:
-        print("here")
+    f.result()
+    print("here")
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
       `<~3s>
 here
 `,
-      `TODO
+      `<~3s>
+None
+here
+`,
+      `<~3s>
+Exception
 `,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `Raising an exception is one way to complete the future.<br />
 <br />
 <code>result()</code> blocks until the future's complete, then raises the same
@@ -622,42 +577,8 @@ exception.
   },
 
   {
-    code: `import asyncio
-
-
-async def main():
-    print(type(foo))
-    bar = foo()
-    print(type(bar))
-    await bar
-
-
-async def foo():
-    print("hello")
-
-
-asyncio.run(main())
+    preface: `A third approach to concurrency: <code>async</code> and <code>await</code>.
 `,
-    question: "Output?",
-    answers: [
-      `TODO
-`,
-      `TODO
-`,
-      `<class 'function'>
-<class 'coroutine'>
-hello
-`,
-    ],
-    correct: 2,
-    explanation: `A function defined with <code>async def</code> is a coroutine function and
-returns a coroutine.<br />
-<br />
-Awaiting a coroutine blocks until that coroutine has completed.
-`,
-  },
-
-  {
     code: `import asyncio
 from time import sleep
 
@@ -674,19 +595,20 @@ async def foo():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
-      `TODO
-`,
       `<~3s>
 hello
 `,
+      `TODO
+`,
+      `TODO
+`,
     ],
-    correct: 2,
-    explanation: `<code>await</code> suspends the current coroutine until the awaited coroutine
-returns.<br />
+    correct: 0,
+    explanation: `A function defined with <code>async def</code> is a coroutine function and
+returns a coroutine.<br />
+<br />
+Awaiting a coroutine blocks until that coroutine has completed.<br />
 <br />
 An <code>await</code> expression's value is whatever the awaited coroutine
 returns.
@@ -694,7 +616,10 @@ returns.
   },
 
   {
+    preface: `Ever forgotten <code>await</code>?
+`,
     code: `import asyncio
+from time import sleep
 
 
 async def main():
@@ -703,21 +628,22 @@ async def main():
 
 
 async def foo():
+    sleep(3)
     return "hello"
 
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
+      `<~3s>
+hello
+`,
       `TODO
 `,
       `<coroutine object foo at 0x100>
 `,
-      `TODO
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `A function defined with <code>async def</code> is a coroutine function and
 returns a coroutine.<br />
 <br />
@@ -726,48 +652,15 @@ To actually run a coroutine you need to e.g. <code>await</code> it.
   },
 
   {
-    code: `import asyncio
-
-
-async def main():
-    await asyncio.gather(foo(), bar())
-
-
-async def foo():
-    await asyncio.sleep(3)
-    print("in foo")
-
-
-async def bar():
-    print("in bar")
-
-
-asyncio.run(main())
+    preface: `Output?
 `,
-    question: "Output?",
-    answers: [
-      `TODO
-`,
-      `TODO
-`,
-      `in bar
-<~3s>
-in foo
-`,
-    ],
-    correct: 2,
-    explanation: `<code>asyncio.sleep()</code> passes control back to the event loop, so it can
-drive other coroutines.
-`,
-  },
-
-  {
     code: `import asyncio
 from time import sleep
 
 
 async def main():
-    await asyncio.gather(foo(), bar())
+    asyncio.create_task(foo())
+    asyncio.create_task(bar())
 
 
 async def foo():
@@ -781,159 +674,64 @@ async def bar():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
+      `<~3s>
+in foo
+in bar
+`,
       `TODO
 `,
+      `TODO
+`,
+    ],
+    correct: 0,
+    explanation: `<code>sleep()</code> blocks the one and only thread.
+`,
+  },
+
+  {
+    preface: `Is <code>asyncio.sleep</code> any help?
+`,
+    code: `import asyncio
+
+
+async def main():
+    asyncio.create_task(foo())
+    asyncio.create_task(bar())
+
+
+async def foo():
+    await asyncio.sleep(3)
+    print("in foo")
+
+
+async def bar():
+    print("in bar")
+
+
+asyncio.run(main())
+`,
+    answers: [
       `TODO
 `,
       `<~3s>
 in foo
 in bar
 `,
-    ],
-    correct: 2,
-    explanation: `<code>time.sleep()</code> blocks the one and only thread.
-`,
-  },
-
-  {
-    code: `import asyncio
-
-
-async def foo():
-    print("in foo")
-
-
-async def main():
-    asyncio.create_task(foo())
-    print("in main")
-
-
-asyncio.run(main())
-`,
-    question: "Output?",
-    answers: [
-      `in main
+      `in bar
+<~3s>
 in foo
 `,
-      `TODO
-`,
-      `TODO
-`,
     ],
-    correct: 0,
-    explanation: `<code>create_task()</code> schedules the task for execution.<br />
-<br />
-But no <code>await</code>, so the <code>main()</code> coroutine keeps control.
+    correct: 2,
+    explanation: `<code>asyncio.sleep()</code> passes control back to the event loop, so it can
+drive other coroutines.
 `,
   },
 
   {
-    code: `from asyncio import create_task, run
-
-
-async def main():
-    await create_task(foo())
-    print("in main")
-
-
-async def foo():
-    print("in foo")
-
-
-run(main())
+    preface: `Output?
 `,
-    question: "Output?",
-    answers: [
-      `in foo
-in main
-`,
-      `TODO
-`,
-      `TODO
-`,
-    ],
-    correct: 0,
-    explanation: `Awaiting an awaitable (here, a <code>Task</code>) transfers control to it.
-`,
-  },
-
-  {
-    code: `import asyncio
-
-
-async def foo():
-    await asyncio.sleep(3)
-    return "foo"
-
-
-async def bar():
-    await asyncio.sleep(1)
-    return "bar"
-
-
-async def main():
-    results = await asyncio.gather(foo(), bar())
-    print(results)
-
-
-asyncio.run(main())
-`,
-    question: "Output?",
-    answers: [
-      `<~3s>
-['foo', 'bar']
-`,
-      `TODO
-`,
-      `TODO
-`,
-    ],
-    correct: 0,
-    explanation: ``,
-  },
-
-  {
-    code: `import asyncio
-from time import sleep
-
-
-async def file_io():
-    sleep(4)
-    print("done")
-
-
-async def main():
-    await asyncio.gather(
-        file_io(),
-        asyncio.sleep(4),
-    )
-    print("here")
-
-
-asyncio.run(main())
-`,
-    question: "Output?",
-    answers: [
-      `<~4s>
-done
-<~4s>
-here
-`,
-      `TODO
-`,
-      `TODO
-`,
-    ],
-    correct: 0,
-    explanation: `File IO blocks the one and only thread.<br />
-<br />
-It doesn't pass control back to the event loop.
-`,
-  },
-
-  {
     code: `import asyncio
 from time import sleep
 
@@ -945,6 +743,7 @@ def file_io():
 
 async def main():
     await asyncio.gather(
+        file_io(),
         asyncio.to_thread(file_io),
         asyncio.sleep(4),
     )
@@ -953,7 +752,6 @@ async def main():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
       `<~4s>
 done
@@ -974,38 +772,41 @@ thread.
   },
 
   {
+    preface: `Output?
+`,
     code: `import asyncio
 
 
 async def foo():
-    await asyncio.sleep(4)
+    print("in foo")
 
 
 async def main():
-    await asyncio.gather(foo(), foo())
-    print("done")
+    asyncio.create_task(foo())
+    print("in main")
 
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
-      `<~4s>
-done
-`,
       `TODO
 `,
       `TODO
+`,
+      `in main
+in foo
 `,
     ],
-    correct: 0,
-    explanation: `<code>asyncio.gather()</code> schedules passed coroutines as tasks.<br />
+    correct: 2,
+    explanation: `<code>create_task()</code> schedules the task for execution.<br />
 <br />
-<code>asyncio.sleep()</code> passes control back to the event loop.
+But no <code>await</code>, so the <code>main()</code> coroutine keeps control.
 `,
   },
 
   {
+    preface: `Just like Question 1, but with threads.
+`,
     code: `import asyncio
 
 
@@ -1022,28 +823,27 @@ async def main():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
-      `TODO
-`,
       `<~4s>
 here
 <~4s>
 here
 done
 `,
+      `TODO
+`,
+      `TODO
+`,
     ],
-    correct: 2,
-    explanation: `<code>await coro</code> passes control to <code>coro</code>, suspending the
-current coroutine until it returns.<br />
-<br />
-During the sleeps, there's no other work scheduled.
+    correct: 0,
+    explanation: `<code>asyncio.sleep</code> passes control to the event loop, but there's no
+other work scheduled.
 `,
   },
 
   {
+    preface: `Output?
+`,
     code: `import asyncio
 
 
@@ -1062,17 +862,16 @@ async def main():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
       `in bar
 in foo
 `,
       `TODO
 `,
+      `TODO
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<code>create_task()</code> schedules the task for execution.<br />
 <br />
 No <code>await</code>, so the <code>main()</code> coroutine keeps control.<br />
@@ -1082,6 +881,8 @@ Awaiting a coroutine doesn't cede control to the event loop.
   },
 
   {
+    preface: `Output?
+`,
     code: `import asyncio
 
 
@@ -1097,22 +898,23 @@ async def main():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
-      `TODO
-`,
       `in foo
 in main
 `,
+      `TODO
+`,
+      `TODO
+`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `Awaiting a task cedes control to the event loop.
 `,
   },
 
   {
+    preface: `Output?
+`,
     code: `import asyncio
 
 
@@ -1132,22 +934,23 @@ async def main():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
-      `TODO
-`,
-      `TODO
-`,
       `in bar
 in foo
 `,
+      `TODO
+`,
+      `TODO
+`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `Awaiting a coroutine doesn't cede control to the event loop.
 `,
   },
 
   {
+    preface: `Output?
+`,
     code: `import asyncio
 
 
@@ -1167,7 +970,6 @@ async def main():
 
 asyncio.run(main())
 `,
-    question: "Output?",
     answers: [
       `TODO
 `,

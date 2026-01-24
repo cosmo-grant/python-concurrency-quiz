@@ -2,18 +2,17 @@ import asyncio
 
 
 async def foo():
-    await asyncio.sleep(3)
-    return "foo"
+    print("in foo")
 
 
 async def bar():
-    await asyncio.sleep(1)
-    return "bar"
+    print("in bar")
 
 
 async def main():
-    results = await asyncio.gather(foo(), bar())
-    print(results)
+    task = asyncio.create_task(foo())
+    await asyncio.create_task(bar())
+    await task
 
 
 asyncio.run(main())

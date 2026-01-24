@@ -1,21 +1,13 @@
-from concurrent.futures import (
-    ThreadPoolExecutor,
-    as_completed,
-)
+from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
 
-def io_bound(t):
-    sleep(t)
-    return t
+def foo():
+    sleep(3)
+    raise Exception
 
 
 with ThreadPoolExecutor() as executor:
-    futures = [
-        executor.submit(io_bound, 3),
-        executor.submit(io_bound, 1),
-        executor.submit(io_bound, 2),
-    ]
-    for f in as_completed(futures):
-        print(f.result())
+    f = executor.submit(foo)
+    f.result()
     print("here")

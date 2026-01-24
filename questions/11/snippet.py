@@ -1,8 +1,13 @@
 from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
-with ThreadPoolExecutor() as executor:
-    res = executor.submit(lambda: sleep(3))
-    print(res)
 
-print("here")
+def foo():
+    sleep(3)
+    return 42
+
+
+with ThreadPoolExecutor() as executor:
+    f = executor.submit(foo)
+    print(f.result())
+    print("here")

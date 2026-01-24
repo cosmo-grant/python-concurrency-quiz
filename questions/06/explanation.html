@@ -1,7 +1,5 @@
-Process objects run in separate Python processes, each with their own GIL.<br />
+<code>thread1.join()</code> blocks the main thread, but not
+<code>thread2</code>.<br />
 <br />
-So they can run in parallel on multicore machines.<br />
-<br />
-For IO-bound targets, you could use threads instead.<br />
-<br />
-The basic API is similar to <code>threading</code>.
+<code>thread1</code> and <code>thread2</code> are CPU-bound, so interleaving
+doesn't help.

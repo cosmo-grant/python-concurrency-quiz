@@ -1,7 +1,4 @@
-Process objects run in separate Python processes, each with their own GIL.<br />
+Careful!<br />
 <br />
-So they can run in parallel on multicore machines.<br />
-<br />
-For CPU-bound processes, running in parallel helps.<br />
-<br />
-The basic API is similar to <code>threading</code>.
+The interpreter won't pause a thread while it's running native code, like
+<code>sum()</code> does.

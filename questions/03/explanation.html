@@ -1,8 +1,5 @@
-There are three threads in play: main, <code>thread1</code>,
+<code>thread1.join()</code> blocks the main thread, but not
 <code>thread2</code>.<br />
 <br />
-The interpreter pauses the running thread regularly, releasing the GIL, and the
-OS decides which to run next.<br />
-<br />
-<code>thread1</code> and <code>thread2</code> are CPU-bound, so interleaving
-doesn't help.
+<code>thread1</code> and <code>thread2</code> are IO-bound, so interleaving
+helps.

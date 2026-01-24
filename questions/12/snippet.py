@@ -1,13 +1,13 @@
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait
 from time import sleep
 
 
 def foo():
     sleep(3)
-    return 42
+    raise Exception
 
 
 with ThreadPoolExecutor() as executor:
     f = executor.submit(foo)
-    print(f.result())
+    wait((f,))
     print("here")

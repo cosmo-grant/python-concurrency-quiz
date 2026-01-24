@@ -1,13 +1,13 @@
 import asyncio
 
 
-async def main():
-    bar = foo()
-    print(bar)
-
-
 async def foo():
-    return "hello"
+    print("in foo")
+
+
+async def main():
+    asyncio.create_task(foo())
+    print("in main")
 
 
 asyncio.run(main())

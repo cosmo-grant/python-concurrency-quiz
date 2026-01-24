@@ -1,13 +1,18 @@
-from asyncio import create_task, run
-
-
-async def main():
-    await create_task(foo())
-    print("in main")
+import asyncio
 
 
 async def foo():
     print("in foo")
 
 
-run(main())
+async def bar():
+    print("in bar")
+
+
+async def main():
+    task = asyncio.create_task(foo())
+    await bar()
+    await task
+
+
+asyncio.run(main())

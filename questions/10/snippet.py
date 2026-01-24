@@ -10,5 +10,6 @@ def io_bound():
 with ThreadPoolExecutor() as executor:
     for _ in range(3):
         executor.submit(io_bound)
+    print("foo")
 
-print("here")
+print("bar")

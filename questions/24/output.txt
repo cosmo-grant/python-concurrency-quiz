@@ -1,2 +1,2 @@
-<~3s>
-['foo', 'bar']
+in foo
+in bar
