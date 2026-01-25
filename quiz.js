@@ -13,6 +13,13 @@ class Quiz {
     this.mainContent = document.getElementById("main-content");
     this.mainContent.hidden = true;
     this.splashScreen = document.getElementById("splash-screen");
+
+    this.finalScoreSection = document.getElementById("final-score-section");
+    this.finalScoreSection.hidden = true;
+    this.finalScoreValue = document.getElementById("final-score-value");
+    this.finalScoreMax = document.getElementById("final-score-max");
+    this.restartButton = document.getElementById("restart-btn");
+
     this.codeDisplay = document.getElementById("code-display");
     this.prefaceText = document.getElementById("preface-text");
     this.scoreDigit = document.getElementById("score-digit");
@@ -39,8 +46,27 @@ class Quiz {
       button.disabled = true;
     }
     this.navButtons = [...this.navBar.children];
-    this.navButtons[0].disabled = false;
+    for (let i = 0; i <= this.currentQuestion; i++) {
+      this.navButtons[i].disabled = false;
+    }
     this.finishButton.style.display = "none";
+  }
+
+  restartQuiz() {
+    // TODO: better way? some function called when both starting and restarting?
+    this.currentQuestion = 0;
+    this.answers = Array(this.totalQuestions).fill(null); // maybe move to local storage later
+    this.score = 0;
+    this.mainContent.hidden = true;
+    this.finalScoreSection.hidden = true;
+
+    this.navButtons.forEach((button) => (button.disabled = true));
+    this.navButtons[0].disabled = false;
+
+    this.finishButton.style.display = "none";
+    this.loadQuestion(this.currentQuestion);
+
+    this.splashScreen.hidden = false;
   }
 
   setupEventListeners() {
@@ -63,6 +89,7 @@ class Quiz {
     );
     this.nextButton.addEventListener("click", () => this.nextQuestion());
     this.finishButton.addEventListener("click", () => this.finishQuiz());
+    this.restartButton.addEventListener("click", () => this.restartQuiz());
   }
 
   startQuiz() {
@@ -121,16 +148,15 @@ class Quiz {
 
   nextQuestion() {
     this.currentQuestion++;
-    if (this.currentQuestion === this.totalQuestions - 1) {
-      this.nextButton.style.display = "none";
-      this.finishButton.style.display = "block";
-    }
     this.navButtons[this.currentQuestion].disabled = false;
     this.loadQuestion(this.currentQuestion);
   }
 
   finishQuiz() {
-    alert(`You got ${this.score} out of ${this.totalQuestions}`);
+    this.mainContent.hidden = true;
+    this.finalScoreSection.hidden = false;
+    this.finalScoreValue.textContent = this.score;
+    this.finalScoreMax.textContent = this.totalQuestions;
   }
 
   selectAnswer(selectedIndex) {
@@ -144,9 +170,15 @@ class Quiz {
       this.score++;
       this.scoreDigit.textContent = this.score;
     }
+    if (this.currentQuestion === this.totalQuestions - 1) {
+      this.nextButton.style.display = "none";
+      this.finishButton.style.display = "block";
+    } else {
+      this.nextButton.style.display = "block";
+      this.finishButton.style.display = "none";
+    }
     this.explanationText.innerHTML = question.explanation;
     this.explanationSection.style.display = "block";
-    this.nextButton.style.display = "block";
   }
 }
 
