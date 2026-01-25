@@ -10,10 +10,14 @@ class Quiz {
   }
 
   initializeElements() {
+    this.mainContent = document.getElementById("main-content");
+    this.mainContent.hidden = true;
+    this.splashScreen = document.getElementById("splash-screen");
     this.codeDisplay = document.getElementById("code-display");
     this.prefaceText = document.getElementById("preface-text");
     this.scoreDigit = document.getElementById("score-digit");
     this.nextButton = document.getElementById("next-btn");
+    this.startQuizButton = document.getElementById("start-quiz-btn");
     this.answerButtons = [
       document.getElementById("answer-0"),
       document.getElementById("answer-1"),
@@ -40,6 +44,17 @@ class Quiz {
   }
 
   setupEventListeners() {
+    this.startQuizButton.addEventListener("click", () => this.startQuiz());
+    // Also allow Enter or Space to start quiz from splash screen
+    document.addEventListener("keydown", (event) => {
+      if (
+        (event.key === "Enter" || event.key === " ") &&
+        !this.splashScreen.hidden
+      ) {
+        event.preventDefault();
+        this.startQuiz();
+      }
+    });
     this.answerButtons.forEach((button, index) => {
       button.addEventListener("click", () => this.selectAnswer(index));
     });
@@ -48,6 +63,16 @@ class Quiz {
     );
     this.nextButton.addEventListener("click", () => this.nextQuestion());
     this.finishButton.addEventListener("click", () => this.finishQuiz());
+  }
+
+  startQuiz() {
+    this.hideSplashScreen();
+    this.loadQuestion(this.currentQuestion);
+  }
+
+  hideSplashScreen() {
+    this.splashScreen.hidden = true;
+    this.mainContent.hidden = false;
   }
 
   hasAnsweredCurrentQuestion() {
