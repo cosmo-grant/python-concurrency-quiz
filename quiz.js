@@ -1,43 +1,30 @@
 class Quiz {
   constructor() {
-    // initialize afresh, whether or not there is saved state
-    this.initializeState();
     this.getElements();
     this.populateNavBar();
     this.setupEventListeners();
-    this.showSplashScreen();
 
-    // handle saved state
-    if (this.savedStateOnLoad) {
-      this.handleSavedState();
+    const savedState = this.loadState();
+    if (savedState) {
+      // offer user choice to continue or resume
+      this.showContinueDialog();
+      this.savedQuestionDialog.textContent = savedState.currentQuestion + 1;
+      this.savedScoreDialog = savedState.answers.filter(Boolean).length;
+      this.totalQuestionsDialog.textContent = QUESTIONS.length;
+
+      this.continueFromSavedButton.addEventListener("click", () => {
+        this.currentQuestion = savedState.currentQuestion;
+        this.answers = savedState.answers;
+        this.startQuiz();
+      });
+
+      this.restartFromSavedButton.addEventListener("click", () => {
+        this.restart();
+      });
+    } else {
+      // no saved state; fresh start
+      this.restart();
     }
-  }
-
-  handleSavedState() {
-    this.showContinueDialog();
-    this.savedQuestionDialog.textContent =
-      this.savedStateOnLoad.currentQuestion + 1;
-    this.savedScoreDialog =
-      this.savedStateOnLoad.answers.filter(Boolean).length;
-    this.totalQuestionsDialog.textContent = QUESTIONS.length;
-
-    this.continueFromSavedButton.addEventListener("click", () => {
-      this.currentQuestion = this.savedStateOnLoad.currentQuestion;
-      this.answers = this.savedStateOnLoad.answers;
-      this.startQuiz();
-    });
-
-    this.restartFromSavedButton.addEventListener("click", () => {
-      this.clearState();
-      this.showSplashScreen();
-    });
-  }
-
-  initializeState() {
-    this.currentQuestion = 0;
-    this.totalQuestions = QUESTIONS.length;
-    this.answers = Array(this.totalQuestions).fill(null); // true, false, null mean correct, incorrect, unanswered
-    this.savedStateOnLoad = this.loadState(); // frozen copy of saved state found when page is loaded
   }
 
   getElements() {
@@ -85,7 +72,7 @@ class Quiz {
   }
 
   populateNavBar() {
-    for (let i = 0; i < this.totalQuestions; i++) {
+    for (let i = 0; i < QUESTIONS.length; i++) {
       const button = document.createElement("button");
       button.textContent = i + 1;
       this.navBar.appendChild(button);
@@ -150,7 +137,7 @@ class Quiz {
     for (let i = 0; i <= this.currentQuestion; i++) {
       this.navButtons[i].disabled = false;
     }
-    for (let i = this.currentQuestion + 1; i < this.totalQuestions; i++) {
+    for (let i = this.currentQuestion + 1; i < QUESTIONS.length; i++) {
       this.navButtons[i].disabled = true;
     }
     this.loadQuestion(this.currentQuestion);
@@ -165,7 +152,9 @@ class Quiz {
   }
 
   restart() {
-    this.initializeState();
+    this.clearState();
+    this.currentQuestion = 0;
+    this.answers = Array(QUESTIONS.length).fill(null);
     this.showSplashScreen();
   }
 
@@ -224,7 +213,7 @@ class Quiz {
     this.saveState();
     this.updateScore();
 
-    if (this.currentQuestion === this.totalQuestions - 1) {
+    if (this.currentQuestion === QUESTIONS.length - 1) {
       this.nextButton.style.display = "none";
       this.finishButton.style.display = "block";
     } else {
@@ -246,10 +235,10 @@ class Quiz {
     this.clearState();
     this.showFinalScoreSection();
     this.finalScoreValue.textContent = this.computeScore();
-    this.finalScoreMax.textContent = this.totalQuestions;
+    this.finalScoreMax.textContent = QUESTIONS.length;
 
     let message = "";
-    const percentage = (this.score / this.totalQuestions) * 100; // use % in case question count changes
+    const percentage = (this.score / QUESTIONS.length) * 100; // use % in case question count changes
 
     if (percentage === 100) {
       message = "A";
