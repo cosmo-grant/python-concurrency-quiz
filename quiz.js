@@ -48,13 +48,13 @@ class Quiz {
     this.finalScoreValue = document.getElementById("final-score-value");
     this.finalScoreMax = document.getElementById("final-score-max");
     this.finalScoreMessage = document.getElementById("final-score-message");
-    this.restartButton = document.getElementById("restart-btn");
+    this.restartButton = document.getElementById("restart-button");
 
     this.codeDisplay = document.getElementById("code-display");
     this.prefaceText = document.getElementById("preface-text");
     this.scoreDigit = document.getElementById("score-digit");
-    this.nextButton = document.getElementById("next-btn");
-    this.startQuizButton = document.getElementById("start-quiz-btn");
+    this.nextButton = document.getElementById("next-button");
+    this.startQuizButton = document.getElementById("start-quiz-button");
     this.answerButtons = [
       document.getElementById("answer-0"),
       document.getElementById("answer-1"),
@@ -67,7 +67,7 @@ class Quiz {
     ];
     this.explanationSection = document.getElementById("explanation-section");
     this.explanationText = document.getElementById("explanation-text");
-    this.finishButton = document.getElementById("finish-btn");
+    this.finishButton = document.getElementById("finish-button");
     this.navBar = document.getElementById("nav-bar");
 
     this.continueDialog = document.getElementById("continue-dialog");
@@ -77,10 +77,10 @@ class Quiz {
       "total-questions-dialog",
     );
     this.continueFromSavedButton = document.getElementById(
-      "continue-from-saved-btn",
+      "continue-from-saved-button",
     );
     this.restartFromSavedButton = document.getElementById(
-      "restart-from-saved-btn",
+      "restart-from-saved-button",
     );
   }
 
