@@ -1,17 +1,43 @@
 class Quiz {
   constructor() {
+    // initialize afresh, whether or not there is saved state
     this.initializeState();
     this.getElements();
     this.populateNavBar();
-    this.initializeDisplay();
     this.setupEventListeners();
+    this.showSplashScreen();
+
+    // handle saved state
+    if (this.savedStateOnLoad) {
+      this.handleSavedState();
+    }
+  }
+
+  handleSavedState() {
+    this.showContinueDialog();
+    this.savedQuestionDialog.textContent =
+      this.savedStateOnLoad.currentQuestion + 1;
+    this.savedScoreDialog =
+      this.savedStateOnLoad.answers.filter(Boolean).length;
+    this.totalQuestionsDialog.textContent = QUESTIONS.length;
+
+    this.continueFromSavedButton.addEventListener("click", () => {
+      this.currentQuestion = this.savedStateOnLoad.currentQuestion;
+      this.answers = this.savedStateOnLoad.answers;
+      this.startQuiz();
+    });
+
+    this.restartFromSavedButton.addEventListener("click", () => {
+      this.clearState();
+      this.showSplashScreen();
+    });
   }
 
   initializeState() {
     this.currentQuestion = 0;
     this.totalQuestions = QUESTIONS.length;
-    this.answers = Array(this.totalQuestions).fill(null); // maybe move to local storage later
-    this.score = 0;
+    this.answers = Array(this.totalQuestions).fill(null); // true, false, null mean correct, incorrect, unanswered
+    this.savedStateOnLoad = this.loadState(); // frozen copy of saved state found when page is loaded
   }
 
   getElements() {
@@ -42,6 +68,19 @@ class Quiz {
     this.explanationText = document.getElementById("explanation-text");
     this.finishButton = document.getElementById("finish-btn");
     this.navBar = document.getElementById("nav-bar");
+
+    this.continueDialog = document.getElementById("continue-dialog");
+    this.savedQuestionDialog = document.getElementById("saved-question-dialog");
+    this.savedScoreDialog = document.getElementById("saved-score-dialog");
+    this.totalQuestionsDialog = document.getElementById(
+      "total-questions-dialog",
+    );
+    this.continueFromSavedButton = document.getElementById(
+      "continue-from-saved-btn",
+    );
+    this.restartFromSavedButton = document.getElementById(
+      "restart-from-saved-btn",
+    );
   }
 
   populateNavBar() {
@@ -53,17 +92,32 @@ class Quiz {
     this.navButtons = [...this.navBar.children];
   }
 
-  initializeDisplay() {
+  showContinueDialog() {
+    this.splashScreen.hidden = true;
+    this.continueDialog.hidden = false;
     this.mainContent.hidden = true;
     this.finalScoreSection.hidden = true;
-    this.finishButton.style.display = "none";
-    for (let i = 0; i <= this.currentQuestion; i++) {
-      this.navButtons[i].disabled = false;
-    }
-    for (let i = this.currentQuestion + 1; i < this.totalQuestions; i++) {
-      this.navButtons[i].disabled = true;
-    }
+  }
+
+  showSplashScreen() {
     this.splashScreen.hidden = false;
+    this.continueDialog.hidden = true;
+    this.mainContent.hidden = true;
+    this.finalScoreSection.hidden = true;
+  }
+
+  showMainContent() {
+    this.splashScreen.hidden = true;
+    this.continueDialog.hidden = true;
+    this.mainContent.hidden = false;
+    this.finalScoreSection.hidden = true;
+  }
+
+  showFinalScoreSection() {
+    this.splashScreen.hidden = true;
+    this.continueDialog.hidden = true;
+    this.mainContent.hidden = true;
+    this.finalScoreSection.hidden = false;
   }
 
   setupEventListeners() {
@@ -89,19 +143,29 @@ class Quiz {
     this.restartButton.addEventListener("click", () => this.restart());
   }
 
-  restart() {
-    this.initializeState();
-    this.initializeDisplay();
-  }
-
   startQuiz() {
-    this.hideSplashScreen();
+    this.showMainContent();
+    this.finishButton.style.display = "none";
+    for (let i = 0; i <= this.currentQuestion; i++) {
+      this.navButtons[i].disabled = false;
+    }
+    for (let i = this.currentQuestion + 1; i < this.totalQuestions; i++) {
+      this.navButtons[i].disabled = true;
+    }
     this.loadQuestion(this.currentQuestion);
   }
 
-  hideSplashScreen() {
-    this.splashScreen.hidden = true;
-    this.mainContent.hidden = false;
+  computeScore() {
+    return this.answers.filter(Boolean).length;
+  }
+
+  updateScore() {
+    this.scoreDigit.textContent = this.computeScore();
+  }
+
+  restart() {
+    this.initializeState();
+    this.showSplashScreen();
   }
 
   hasAnsweredCurrentQuestion() {
@@ -148,30 +212,17 @@ class Quiz {
     }
   }
 
-  nextQuestion() {
-    this.currentQuestion++;
-    this.navButtons[this.currentQuestion].disabled = false;
-    this.loadQuestion(this.currentQuestion);
-  }
-
-  finishQuiz() {
-    this.mainContent.hidden = true;
-    this.finalScoreSection.hidden = false;
-    this.finalScoreValue.textContent = this.score;
-    this.finalScoreMax.textContent = this.totalQuestions;
-  }
-
   selectAnswer(selectedIndex) {
-    this.answers[this.currentQuestion] = selectedIndex;
     this.answerButtons.forEach((button) => {
       button.disabled = true;
     });
+
     const question = QUESTIONS[this.currentQuestion];
     const correctIndex = question.correct;
-    if (selectedIndex === correctIndex) {
-      this.score++;
-      this.scoreDigit.textContent = this.score;
-    }
+    this.answers[this.currentQuestion] = correctIndex === selectedIndex;
+    this.saveState();
+    this.updateScore();
+
     if (this.currentQuestion === this.totalQuestions - 1) {
       this.nextButton.style.display = "none";
       this.finishButton.style.display = "block";
@@ -181,6 +232,49 @@ class Quiz {
     }
     this.explanationText.innerHTML = question.explanation;
     this.explanationSection.style.display = "block";
+  }
+
+  nextQuestion() {
+    this.currentQuestion++;
+    this.saveState();
+    this.navButtons[this.currentQuestion].disabled = false;
+    this.loadQuestion(this.currentQuestion);
+  }
+
+  finishQuiz() {
+    this.clearState();
+    this.showFinalScoreSection();
+    this.finalScoreValue.textContent = this.computeScore();
+    this.finalScoreMax.textContent = this.totalQuestions;
+  }
+
+  // should be called after any state-changing action
+  saveState() {
+    const state = {
+      currentQuestion: this.currentQuestion,
+      answers: this.answers,
+    };
+    localStorage.setItem(
+      "python-concurrency-quiz-state",
+      JSON.stringify(state),
+    );
+  }
+
+  // TODO: what if questions updated since last session?
+  loadState() {
+    try {
+      const savedState = localStorage.getItem("python-concurrency-quiz-state");
+      if (savedState) {
+        return JSON.parse(savedState);
+      }
+    } catch (e) {
+      console.warn("Failed to load saved quiz state:", e);
+    }
+    return null;
+  }
+
+  clearState() {
+    localStorage.removeItem("python-concurrency-quiz-state");
   }
 }
 
