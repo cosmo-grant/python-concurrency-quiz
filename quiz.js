@@ -47,6 +47,7 @@ class Quiz {
     this.finalScoreSection = document.getElementById("final-score-section");
     this.finalScoreValue = document.getElementById("final-score-value");
     this.finalScoreMax = document.getElementById("final-score-max");
+    this.finalScoreMessage = document.getElementById("final-score-message");
     this.restartButton = document.getElementById("restart-btn");
 
     this.codeDisplay = document.getElementById("code-display");
@@ -246,6 +247,23 @@ class Quiz {
     this.showFinalScoreSection();
     this.finalScoreValue.textContent = this.computeScore();
     this.finalScoreMax.textContent = this.totalQuestions;
+
+    let message = "";
+    const percentage = (this.score / this.totalQuestions) * 100; // use % in case question count changes
+
+    if (percentage === 100) {
+      message = "A";
+    } else if (percentage >= 80) {
+      message = "B";
+    } else if (percentage >= 60) {
+      message = "C";
+    } else if (percentage >= 40) {
+      message = "D";
+    } else {
+      message = "F";
+    }
+
+    this.finalScoreMessage.textContent = message;
   }
 
   // should be called after any state-changing action
