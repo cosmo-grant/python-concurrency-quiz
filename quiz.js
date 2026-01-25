@@ -1,21 +1,24 @@
 class Quiz {
   constructor() {
+    this.initializeState();
+    this.getElements();
+    this.populateNavBar();
+    this.initializeDisplay();
+    this.setupEventListeners();
+  }
+
+  initializeState() {
     this.currentQuestion = 0;
     this.totalQuestions = QUESTIONS.length;
     this.answers = Array(this.totalQuestions).fill(null); // maybe move to local storage later
     this.score = 0;
-    this.initializeElements();
-    this.setupEventListeners();
-    this.loadQuestion(this.currentQuestion);
   }
 
-  initializeElements() {
+  getElements() {
     this.mainContent = document.getElementById("main-content");
-    this.mainContent.hidden = true;
     this.splashScreen = document.getElementById("splash-screen");
 
     this.finalScoreSection = document.getElementById("final-score-section");
-    this.finalScoreSection.hidden = true;
     this.finalScoreValue = document.getElementById("final-score-value");
     this.finalScoreMax = document.getElementById("final-score-max");
     this.restartButton = document.getElementById("restart-btn");
@@ -39,33 +42,27 @@ class Quiz {
     this.explanationText = document.getElementById("explanation-text");
     this.finishButton = document.getElementById("finish-btn");
     this.navBar = document.getElementById("nav-bar");
+  }
+
+  populateNavBar() {
     for (let i = 0; i < this.totalQuestions; i++) {
       const button = document.createElement("button");
       button.textContent = i + 1;
       this.navBar.appendChild(button);
-      button.disabled = true;
     }
     this.navButtons = [...this.navBar.children];
+  }
+
+  initializeDisplay() {
+    this.mainContent.hidden = true;
+    this.finalScoreSection.hidden = true;
+    this.finishButton.style.display = "none";
     for (let i = 0; i <= this.currentQuestion; i++) {
       this.navButtons[i].disabled = false;
     }
-    this.finishButton.style.display = "none";
-  }
-
-  restartQuiz() {
-    // TODO: better way? some function called when both starting and restarting?
-    this.currentQuestion = 0;
-    this.answers = Array(this.totalQuestions).fill(null); // maybe move to local storage later
-    this.score = 0;
-    this.mainContent.hidden = true;
-    this.finalScoreSection.hidden = true;
-
-    this.navButtons.forEach((button) => (button.disabled = true));
-    this.navButtons[0].disabled = false;
-
-    this.finishButton.style.display = "none";
-    this.loadQuestion(this.currentQuestion);
-
+    for (let i = this.currentQuestion + 1; i < this.totalQuestions; i++) {
+      this.navButtons[i].disabled = true;
+    }
     this.splashScreen.hidden = false;
   }
 
@@ -89,7 +86,12 @@ class Quiz {
     );
     this.nextButton.addEventListener("click", () => this.nextQuestion());
     this.finishButton.addEventListener("click", () => this.finishQuiz());
-    this.restartButton.addEventListener("click", () => this.restartQuiz());
+    this.restartButton.addEventListener("click", () => this.restart());
+  }
+
+  restart() {
+    this.initializeState();
+    this.initializeDisplay();
   }
 
   startQuiz() {
