@@ -109,20 +109,49 @@ class Quiz {
   }
 
   setupEventListeners() {
-    this.startQuizButton.addEventListener("click", () => this.startQuiz());
-    // Also allow Enter or Space to start quiz from splash screen
+    // Handle some keyboard interaction.
+    // The approach is to translate keyboard events into click events.
+    // So the direct cause of behaviour is always clicks.
+    // We need guards though, e.g. to prevent clicking disabled or hidden buttons.
     document.addEventListener("keydown", (event) => {
+      // Enter or Space to start, finish, restart, or move to next question
+      // Use `else if` even when the conditions are statically incompatible to prevent races.
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        if (!this.splashScreen.hidden) {
+          this.startQuizButton.dispatchEvent(new Event("click"));
+        } else if (this.nextButton.style.display === "block") {
+          this.nextButton.dispatchEvent(new Event("click"));
+        } else if (
+          this.finishButton.style.display === "block" &&
+          this.finalScoreSection.hidden
+        ) {
+          this.finishButton.dispatchEvent(new Event("click"));
+        } else if (!this.finalScoreSection.hidden) {
+          this.restartButton.dispatchEvent(new Event("click"));
+        }
+      }
+
+      // Number keys to select answers.
       if (
-        (event.key === "Enter" || event.key === " ") &&
-        !this.splashScreen.hidden
+        event.key >= "1" &&
+        event.key <= this.answerButtons.length.toString() &&
+        !this.answerButtons[0].disabled
       ) {
         event.preventDefault();
-        this.startQuiz();
+        const answerIndex = parseInt(event.key) - 1;
+        this.answerButtons[answerIndex].dispatchEvent(new Event("click"));
       }
     });
+
+    this.startQuizButton.addEventListener("click", () => this.startQuiz());
+
     this.answerButtons.forEach((button, index) => {
-      button.addEventListener("click", () => this.selectAnswer(index));
+      button.addEventListener("click", () => {
+        this.selectAnswer(index);
+      });
     });
+
     this.navButtons.forEach((button, index) =>
       button.addEventListener("click", () => this.loadQuestion(index)),
     );
