@@ -1,5 +1,9 @@
-Process objects run in separate Python processes, each with their own GIL.<br />
-<br />
-So they can run in parallel on multicore machines.<br />
-<br />
-For CPU-bound processes, running in parallel helps.
+<p>
+  <code>threading.excepthook()</code> prints on stderr an exception raised by
+  <code>Thread.run()</code>.
+</p>
+
+<p>
+  But the exception doesn't propagate to the main thread, so
+  <code>here</code> is still printed and the exit code is 0.
+</p>

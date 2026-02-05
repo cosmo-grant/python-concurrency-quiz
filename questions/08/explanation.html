@@ -1,5 +1,4 @@
-Process objects run in separate Python processes, each with their own GIL.<br />
-<br />
-So they can run in parallel on multicore machines.<br />
-<br />
-For IO-bound targets, threads might be the better choice.
+<p>
+  The interpreter doesn't pause a thread while it's running native code, like
+  <code>sum()</code> does.
+</p>

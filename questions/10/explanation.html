@@ -1,2 +1,5 @@
-The context manager's <code>__exit__</code> blocks until the threads are done
-and the resources freed.
+<p>Process objects run in separate processes, each with their own GIL.</p>
+
+<p>So they <em>can</em> run in parallel.</p>
+
+<p>But for io-bound work threads might be the better choice.</p>

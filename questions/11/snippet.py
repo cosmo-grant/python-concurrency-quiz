@@ -1,13 +1,17 @@
-from concurrent.futures import ThreadPoolExecutor
-from time import sleep
+from multiprocessing import Process
 
 
-def foo():
-    sleep(3)
-    return 42
+def cpu_bound():
+    sum(i**2 for i in range(2**25))  # assume takes 3s of cpu
+    print("done")
 
 
-with ThreadPoolExecutor() as executor:
-    f = executor.submit(foo)
-    print(f.result())
+if __name__ == "__main__":
+    # running on multicore machine
+    proc1 = Process(target=cpu_bound)
+    proc2 = Process(target=cpu_bound)
+    proc1.start()
+    proc2.start()
+    proc1.join()
+    proc2.join()
     print("here")

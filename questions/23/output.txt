@@ -1,2 +1,1 @@
-in bar
-in foo
+Exception

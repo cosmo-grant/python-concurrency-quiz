@@ -1,18 +1,14 @@
 import asyncio
 
 
-async def main():
-    asyncio.create_task(foo())
-    asyncio.create_task(bar())
-
-
-async def foo():
+async def io_bound():
     await asyncio.sleep(3)
-    print("in foo")
+    print("done")
 
 
-async def bar():
-    print("in bar")
+async def main():
+    await asyncio.gather(io_bound(), io_bound())
+    print("here")
 
 
 asyncio.run(main())

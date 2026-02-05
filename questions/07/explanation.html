@@ -1,4 +1,5 @@
-Careful!<br />
-<br />
-The interpreter won't pause a thread while it's running native code, like
-<code>sum()</code> does.
+<p>
+  <code>thread1.join()</code> blocks the main thread, not <code>thread2</code>.
+</p>
+
+<p>But they're still cpu-bound so the total time is unchanged.</p>

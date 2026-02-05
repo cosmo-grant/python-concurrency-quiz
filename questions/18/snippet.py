@@ -2,16 +2,15 @@ import asyncio
 from time import sleep
 
 
-def file_io():
-    sleep(4)
+def io_bound():
+    sleep(3)
     print("done")
 
 
 async def main():
     await asyncio.gather(
-        file_io(),
-        asyncio.to_thread(file_io),
-        asyncio.sleep(4),
+        asyncio.to_thread(io_bound),
+        asyncio.to_thread(io_bound),
     )
     print("here")
 

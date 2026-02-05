@@ -1,5 +1,11 @@
-<code>asyncio.to_thread()</code> runs the passed function in a separate thread,
-returning a coroutine.<br />
-<br />
-<code>sleep()</code> releases the GIL so control can pass back to the main
-thread.
+<p>
+  <code>asyncio.to_thread()</code> is useful for async-unaware io-bound
+  functions.
+</p>
+
+<p>It runs the passed function in a separate thread, returning a coroutine.</p>
+
+<p>
+  <code>sleep()</code> releases the GIL so control can pass back to the main
+  thread.
+</p>

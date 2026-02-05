@@ -1,15 +1,16 @@
-from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import Process
 from time import sleep
 
 
 def io_bound():
-    sleep(4)
+    sleep(3)
     print("done")
 
 
-with ThreadPoolExecutor() as executor:
-    for _ in range(3):
-        executor.submit(io_bound)
-    print("foo")
-
-print("bar")
+if __name__ == "__main__":
+    # running on multicore machine
+    proc1 = Process(target=io_bound)
+    proc2 = Process(target=io_bound)
+    proc1.start()
+    proc2.start()
+    print("here")

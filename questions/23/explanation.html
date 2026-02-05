@@ -1,1 +1,8 @@
-Awaiting a coroutine doesn't cede control to the event loop.
+<p>
+  By default, <code>gather()</code> propagates the first raised exception, but
+  <em>doesn't</em> cancel its other awaitables.
+</p>
+<p>
+  However, when the exception propagates to <code>asyncio.run()</code>,
+  <em>it</em> cancels any remaining awaitables.
+</p>

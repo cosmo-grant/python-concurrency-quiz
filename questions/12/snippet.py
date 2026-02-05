@@ -1,13 +1,12 @@
-from concurrent.futures import ThreadPoolExecutor, wait
-from time import sleep
+from multiprocessing import Process
 
 
-def foo():
-    sleep(3)
+def bad():
     raise Exception
 
 
-with ThreadPoolExecutor() as executor:
-    f = executor.submit(foo)
-    wait((f,))
+if __name__ == "__main__":
+    proc = Process(target=bad)
+    proc.start()
+    proc.join()
     print("here")

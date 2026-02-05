@@ -1,1 +1,16 @@
-<code>join()</code> blocks until the receiver completes.
+<p>A thread runs only when it holds the Global Interpreter Lock.</p>
+
+<p>
+  The running thread is paused regularly, or when it makes a syscall, and a
+  ready thread gets the GIL and runs. Interleaved, not parallel.
+</p>
+
+<p>
+  Thus: when <code>thread1</code> and <code>thread2</code> sleep, the main
+  thread runs.
+</p>
+
+<p>
+  <code>thread1</code> and <code>thread2</code> are io-bound, so interleaving
+  helps.
+</p>

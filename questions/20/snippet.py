@@ -2,14 +2,12 @@ import asyncio
 
 
 async def foo():
-    await asyncio.sleep(4)
-    print("here")
+    print("in foo")
 
 
 async def main():
-    await foo()
-    await foo()
-    print("done")
+    await asyncio.create_task(foo())
+    print("in main")
 
 
 asyncio.run(main())

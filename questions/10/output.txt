@@ -1,7 +1,4 @@
-foo
-<~4s>
+here
+<~3s>
 done
 done
-done
-bar
-
