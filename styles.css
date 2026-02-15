@@ -410,19 +410,6 @@ pre {
   border-color: var(--color-text);
 }
 
-/* Stack answer buttons on narrow screens */
-@media (max-width: 480px) {
-  #answers-row {
-    flex-wrap: wrap;
-  }
-
-  #answer-0,
-  #answer-1,
-  #answer-2 {
-    flex: 1 1 100%;
-  }
-}
-
 /* -------------------------------------------
    Explanation Section
    ------------------------------------------- */
