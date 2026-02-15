@@ -1,0 +1,508 @@
+/* ===========================================
+   CSS for Python Concurrency Quiz
+   =========================================== */
+
+/* -------------------------------------------
+   Minimal Reset
+   
+   Gets us to a consistent starting point
+   across all browsers.
+   ------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+/* Focus states for accessibility */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------
+   CSS Custom Properties (Variables)
+   
+   Light mode is the default.
+   Dark mode overrides via media query below.
+   ------------------------------------------- */
+
+:root {
+  /* Base colors */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f5f5f5;
+  --color-text: #1a1a1a;
+  --color-text-muted: #666666;
+
+  /* Interactive elements */
+  --color-primary: #0066cc;
+  --color-primary-hover: #0052a3;
+
+  /* Feedback colors */
+  --color-correct: #2e7d32;
+
+  /* Borders */
+  --color-border: #dddddd;
+
+  /* Spacing scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Typography */
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", "Consolas", monospace;
+  --font-size-base: 1rem;
+  --line-height: 1.5;
+}
+
+/* Dark mode overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1a1a1a;
+    --color-bg-secondary: #2d2d2d;
+    --color-text: #e0e0e0;
+    --color-text-muted: #a0a0a0;
+
+    --color-primary: #4da6ff;
+    --color-primary-hover: #80bfff;
+
+    --color-correct: #66bb6a;
+
+    --color-border: #444444;
+  }
+}
+
+/* -------------------------------------------
+   Base Styles
+   
+   Apply variables to fundamental elements.
+   ------------------------------------------- */
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+/* Ensure hidden attribute works even with display overrides */
+[hidden] {
+  display: none !important;
+}
+
+/* -------------------------------------------
+   Splash Screen
+   ------------------------------------------- */
+
+#splash-screen {
+  /* Center content vertically and horizontally */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-lg);
+  text-align: center;
+}
+
+#splash-screen h1 {
+  margin: 0 0 var(--space-md) 0;
+  font-size: 2rem;
+}
+
+#splash-screen p {
+  margin: 0 0 var(--space-md) 0;
+  color: var(--color-text-muted);
+}
+
+#splash-screen a {
+  color: var(--color-primary);
+}
+
+#splash-screen a:hover {
+  color: var(--color-primary-hover);
+}
+
+#start-quiz-button {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-base);
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#start-quiz-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+#splash-screen footer {
+  position: absolute;
+  bottom: var(--space-lg);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+#splash-screen footer a {
+  color: var(--color-text-muted);
+}
+
+#splash-screen footer a:hover {
+  color: var(--color-primary);
+}
+
+/* -------------------------------------------
+   Navigation Bar
+   ------------------------------------------- */
+
+#nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: center;
+  margin-bottom: var(--space-lg);
+}
+
+#nav-bar button {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+/* Disabled: future questions user hasn't reached yet */
+#nav-bar button:disabled {
+  opacity: 0.3;
+  background-color: var(--color-bg-secondary);
+  cursor: not-allowed;
+}
+
+/* Currently viewing this question - bold border */
+#nav-bar button.viewing {
+  border-width: 3px;
+  border-color: var(--color-text);
+}
+
+/* Previously answered correctly */
+#nav-bar button.correct {
+  border-color: var(--color-correct);
+  background-color: var(--color-correct);
+  color: #ffffff;
+}
+
+/* Viewing + correct: keep green, add bold border */
+#nav-bar button.viewing.correct {
+  border-color: var(--color-text);
+}
+
+/* -------------------------------------------
+   Main Content Layout
+   ------------------------------------------- */
+
+#main-content {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+/* Score display */
+#main-content > div:first-child {
+  margin-bottom: var(--space-md);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+/* Preface text (question prompt) */
+#preface-text {
+  margin-bottom: var(--space-md);
+}
+
+/* -------------------------------------------
+   Code Display
+   ------------------------------------------- */
+
+#code-row {
+  position: relative;
+}
+
+#code-row > pre {
+  /* Takes full width, unaffected by next button */
+}
+
+#code-display {
+  display: block;
+  padding: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+
+pre {
+  margin: 0;
+}
+
+/* -------------------------------------------
+   Answer Buttons
+   ------------------------------------------- */
+
+/* Container for answer buttons and next button */
+#answers-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-sm);
+  margin: var(--space-lg) 0;
+}
+
+/* Stack answer buttons on narrow screens */
+@media (max-width: 480px) {
+  #answers-row {
+    flex-wrap: wrap;
+  }
+
+  #answer-0,
+  #answer-1,
+  #answer-2 {
+    flex: 1 1 100%;
+  }
+}
+
+/* Base answer button styles */
+#answer-0,
+#answer-1,
+#answer-2 {
+  flex: 1;
+  min-height: 4rem;
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+}
+
+#answer-0:hover:not(:disabled),
+#answer-1:hover:not(:disabled),
+#answer-2:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+#answer-0:disabled,
+#answer-1:disabled,
+#answer-2:disabled {
+  cursor: default;
+}
+
+/* Answer button text (preserve whitespace for output formatting) */
+#answer-0 pre,
+#answer-1 pre,
+#answer-2 pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  white-space: pre-wrap;
+}
+
+/* Selected answer (the one user clicked) - bold border */
+#answer-0.selected,
+#answer-1.selected,
+#answer-2.selected {
+  border-width: 3px;
+  border-color: var(--color-text);
+}
+
+/* Correct answer - green */
+#answer-0.correct,
+#answer-1.correct,
+#answer-2.correct {
+  border-color: var(--color-correct);
+  background-color: var(--color-correct);
+  color: #ffffff;
+}
+
+/* Selected + correct: green background, bold border */
+#answer-0.selected.correct,
+#answer-1.selected.correct,
+#answer-2.selected.correct {
+  border-color: var(--color-text);
+}
+
+/* -------------------------------------------
+   Explanation Section
+   ------------------------------------------- */
+
+#explanation-section {
+  margin: var(--space-lg) 0;
+  padding: var(--space-md);
+  background-color: var(--color-bg-secondary);
+  border-radius: 4px;
+}
+
+#explanation-text {
+  line-height: var(--line-height);
+}
+
+#explanation-text p {
+  margin: 0 0 var(--space-sm) 0;
+}
+
+#explanation-text p:last-child {
+  margin-bottom: 0;
+}
+
+#explanation-text code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: var(--color-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+/* -------------------------------------------
+   Action Buttons (Next, Finish, Restart)
+   ------------------------------------------- */
+
+#next-button {
+  position: absolute;
+  right: calc(-1 * (var(--space-md) + 2.5rem));
+  top: 0;
+  bottom: 0;
+  width: 2.5rem;
+  padding: 0;
+  font-size: 1.5rem;
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#next-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+#finish-button,
+#restart-button {
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-base);
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#finish-button:hover,
+#restart-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* -------------------------------------------
+   Final Score Section
+   ------------------------------------------- */
+
+#final-score-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-lg);
+  text-align: center;
+}
+
+#final-score-section p {
+  margin: 0 0 var(--space-md) 0;
+  font-size: 1.25rem;
+}
+
+#final-score-value {
+  font-weight: bold;
+}
+
+#final-score-message {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* -------------------------------------------
+   Continue Dialog
+   ------------------------------------------- */
+
+#continue-dialog {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-lg);
+}
+
+#continue-dialog > div {
+  max-width: 24rem;
+  padding: var(--space-lg);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  text-align: center;
+}
+
+#continue-dialog h3 {
+  margin: 0 0 var(--space-md) 0;
+}
+
+#continue-dialog p {
+  margin: 0 0 var(--space-sm) 0;
+}
+
+#continue-dialog button {
+  margin: var(--space-md) var(--space-xs) 0;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#continue-from-saved-button {
+  color: #ffffff;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+#continue-from-saved-button:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+#restart-from-saved-button {
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+#restart-from-saved-button:hover {
+  background-color: var(--color-bg-secondary);
+}

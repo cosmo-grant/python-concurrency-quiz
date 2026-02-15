@@ -9,7 +9,10 @@ class Quiz {
       // offer user choice to continue or resume
       this.showContinueDialog();
       this.savedQuestionDialog.textContent = savedState.currentQuestion + 1;
-      this.savedScoreDialog.textContent = savedState.answers.filter((selectedAnswer, questionIndex) => selectedAnswer === QUESTIONS[questionIndex].correct).length;
+      this.savedScoreDialog.textContent = savedState.answers.filter(
+        (selectedAnswer, questionIndex) =>
+          selectedAnswer === QUESTIONS[questionIndex].correct,
+      ).length;
       this.totalQuestionsDialog.textContent = QUESTIONS.length;
 
       this.continueFromSavedButton.addEventListener("click", () => {
@@ -170,11 +173,25 @@ class Quiz {
     for (let i = this.currentQuestion + 1; i < QUESTIONS.length; i++) {
       this.navButtons[i].disabled = true;
     }
+    // Restore nav button classes for previously answered questions
+    for (let i = 0; i < this.answers.length; i++) {
+      const navBtn = this.navButtons[i];
+      navBtn.classList.remove("viewing", "correct");
+      if (
+        this.answers[i] !== null &&
+        this.answers[i] === QUESTIONS[i].correct
+      ) {
+        navBtn.classList.add("correct");
+      }
+    }
     this.loadQuestion(this.currentQuestion);
   }
 
   computeScore() {
-    return this.answers.filter((selectedAnswer, questionIndex) => selectedAnswer === QUESTIONS[questionIndex].correct).length;
+    return this.answers.filter(
+      (selectedAnswer, questionIndex) =>
+        selectedAnswer === QUESTIONS[questionIndex].correct,
+    ).length;
   }
 
   updateScore() {
@@ -202,12 +219,25 @@ class Quiz {
       samp.textContent = question.answers[index];
     });
 
+    // Clear answer button classes
+    this.answerButtons.forEach((button) => {
+      button.classList.remove("selected", "correct");
+    });
+
+    // Update nav bar: mark which question is being viewed
+    this.navButtons.forEach((btn) => btn.classList.remove("viewing"));
+    this.navButtons[index].classList.add("viewing");
+
     if (index < this.currentQuestion) {
       // reviewing a previous question
       this.answerButtons.forEach((button) => {
         button.disabled = true;
       });
+      const selectedIndex = this.answers[index];
+      this.answerButtons[selectedIndex].classList.add("selected");
+      this.answerButtons[question.correct].classList.add("correct");
       this.explanationText.innerHTML = question.explanation;
+      this.explanationSection.style.display = "block";
       this.nextButton.style.display = "none";
     } else if (
       index === this.currentQuestion &&
@@ -217,7 +247,7 @@ class Quiz {
       this.answerButtons.forEach((button) => {
         button.disabled = false;
       });
-      this.explanationText.innerHTML = "";
+      this.explanationSection.style.display = "none";
       this.nextButton.style.display = "none";
     } else if (
       index === this.currentQuestion &&
@@ -227,7 +257,11 @@ class Quiz {
       this.answerButtons.forEach((button) => {
         button.disabled = true;
       });
+      const selectedIndex = this.answers[index];
+      this.answerButtons[selectedIndex].classList.add("selected");
+      this.answerButtons[question.correct].classList.add("correct");
       this.explanationText.innerHTML = question.explanation;
+      this.explanationSection.style.display = "block";
       this.nextButton.style.display = "block";
     }
   }
@@ -239,9 +273,20 @@ class Quiz {
 
     const question = QUESTIONS[this.currentQuestion];
     const correctIndex = question.correct;
+    const isCorrect = correctIndex === selectedIndex;
     this.answers[this.currentQuestion] = selectedIndex;
     this.saveState();
     this.updateScore();
+
+    // Update answer buttons: show selected and correct
+    this.answerButtons[selectedIndex].classList.add("selected");
+    this.answerButtons[correctIndex].classList.add("correct");
+
+    // Update nav bar: mark this question as correct
+    if (isCorrect) {
+      const navBtn = this.navButtons[this.currentQuestion];
+      navBtn.classList.add("correct");
+    }
 
     if (this.currentQuestion === QUESTIONS.length - 1) {
       this.nextButton.style.display = "none";
