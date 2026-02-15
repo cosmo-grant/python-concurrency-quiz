@@ -254,6 +254,14 @@ body {
   border-color: var(--color-text);
 }
 
+/* Mobile: allow nav buttons to wrap instead of scroll */
+@media (max-width: 480px) {
+  #nav-bar {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
 /* -------------------------------------------
    Main Content Layout
    ------------------------------------------- */
