@@ -332,19 +332,6 @@ pre {
   margin: var(--space-lg) 0;
 }
 
-/* Stack answer buttons on narrow screens */
-@media (max-width: 480px) {
-  #answers-row {
-    flex-wrap: wrap;
-  }
-
-  #answer-0,
-  #answer-1,
-  #answer-2 {
-    flex: 1 1 100%;
-  }
-}
-
 /* Base answer button styles */
 #answer-0,
 #answer-1,
@@ -412,6 +399,19 @@ pre {
 #answer-1.selected.correct,
 #answer-2.selected.correct {
   border-color: var(--color-text);
+}
+
+/* Stack answer buttons on narrow screens */
+@media (max-width: 480px) {
+  #answers-row {
+    flex-wrap: wrap;
+  }
+
+  #answer-0,
+  #answer-1,
+  #answer-2 {
+    flex: 1 1 100%;
+  }
 }
 
 /* -------------------------------------------
