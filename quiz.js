@@ -15,6 +15,7 @@ class Quiz {
       this.continueFromSavedButton.addEventListener("click", () => {
         this.currentQuestion = savedState.currentQuestion;
         this.answers = savedState.answers;
+        this.updateScore();
         this.startQuiz();
       });
 
