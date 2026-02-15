@@ -315,9 +315,11 @@ pre {
   background-color: var(--color-bg);
   color: var(--color-text);
   text-align: left;
-  vertical-align: top;
   cursor: pointer;
   transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+  /* Top-align content */
+  display: flex;
+  align-items: flex-start;
 }
 
 #answer-0:hover:not(:disabled),
