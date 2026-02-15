@@ -14,8 +14,6 @@ print("done")
 print("here")
 `,
     answers: [
-      `NOT ME!
-`,
       `<~3s>
 done
 <~3s>
@@ -24,8 +22,10 @@ here
 `,
       `NOT ME!
 `,
+      `NOT ME!
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>One process, one thread, no event loop.</p>
 
 <p>Simple. Slow.</p>
@@ -33,9 +33,7 @@ here
   },
   
   {
-    preface: `<p>Let's move the work into threads.</p>
-
-<p>Output?</p>
+    preface: `<p>Let's move the work into threads. Output?</p>
 `,
     code: `from threading import Thread
 from time import sleep
@@ -53,24 +51,24 @@ thread2.start()
 print("here")
 `,
     answers: [
-      `<~3s>
-here
-done
-done
-`,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
       `here
 <~3s>
 done
 done
 `,
+      `<~3s>
+here
+done
+done
+`,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>A thread runs only when it holds the Global Interpreter Lock.</p>
 
 <p>
@@ -111,24 +109,24 @@ thread2.join()
 print("here")
 `,
     answers: [
+      `<~3s>
+done
+done
+here
+`,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
       `here
 <~3s>
 done
 done
 `,
-      `<~3s>
-done
-done
-here
-`,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p><code>join()</code> blocks until the receiver completes.</p>
 `,
   },
@@ -154,24 +152,24 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `<~3s>
-done
-done
-here
-`,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
       `here
 <~3s>
 done
 done
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
+      `<~3s>
+done
+done
+here
+`,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>
   <code>thread1.join()</code> blocks the main thread, but not
   <code>thread2</code>.
@@ -186,7 +184,8 @@ done
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(i**2 for i in range(2**25))
     print("done")
 
 
@@ -197,11 +196,6 @@ thread2.start()
 print("here")
 `,
     answers: [
-      `here
-<~6s>
-done
-done
-`,
       `<~6s>
 done
 done
@@ -212,8 +206,13 @@ here
 done
 done
 `,
+      `here
+<~6s>
+done
+done
+`,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>
   The main thread runs when <code>thread1</code> and <code>thread2</code> are
   paused.
@@ -233,7 +232,8 @@ done
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(i**2 for i in range(2**25))
     print("done")
 
 
@@ -246,11 +246,6 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `here
-<~6s>
-done
-done
-`,
       `<~3s>
 done
 <~3s>
@@ -262,8 +257,13 @@ done
 done
 here
 `,
+      `here
+<~6s>
+done
+done
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>Same as before: <code>join()</code> blocks until the receiver completes.</p>
 `,
   },
@@ -275,7 +275,8 @@ here
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(i**2 for i in range(2**25))
     print("done")
 
 
@@ -288,6 +289,11 @@ thread2.join()
 print("here")
 `,
     answers: [
+      `<~6s>
+done
+done
+here
+`,
       `<~3s>
 done
 <~3s>
@@ -300,13 +306,8 @@ done
 <~3s>
 done
 `,
-      `<~6s>
-done
-done
-here
-`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>
   <code>thread1.join()</code> blocks the main thread, not <code>thread2</code>.
 </p>
@@ -322,7 +323,8 @@ here
 
 
 def cpu_bound():
-    sum(range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(range(2**25))
     print("done")
 
 
@@ -335,24 +337,24 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `<~6s>
-done
-done
-here
-`,
-      `<~3s>
-done
-done
-here
-`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
+      `<~3s>
+done
+done
+here
+`,
+      `<~6s>
+done
+done
+here
+`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>
   The interpreter doesn't pause a thread while it's running native code, like
   <code>sum()</code> does.
@@ -362,11 +364,6 @@ here
   
   {
     preface: `<p>What if threads go bad?</p>
-
-<p>
-  (I omit any headers and tracebacks in the output but keep the stringified
-  exception, if any.)
-</p>
 `,
     code: `from threading import Thread
 
@@ -381,9 +378,9 @@ thread.join()
 print("here")
 `,
     answers: [
-      `Exception
-`,
       `here
+`,
+      `Exception
 `,
       `Exception
 here
@@ -428,16 +425,16 @@ if __name__ == "__main__":
 done
 done
 `,
+      `here
+<~3s>
+done
+done
+`,
       `<~3s>
 done
 <~3s>
 done
 here
-`,
-      `here
-<~3s>
-done
-done
 `,
     ],
     correct: 0,
@@ -456,7 +453,8 @@ done
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(i**2 for i in range(2**25))
     print("done")
 
 
@@ -473,7 +471,6 @@ if __name__ == "__main__":
     answers: [
       `<~3s>
 done
-<~3s>
 done
 here
 `,
@@ -484,11 +481,12 @@ here
 `,
       `<~3s>
 done
+<~3s>
 done
 here
 `,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>
   <code>thread1</code> and <code>thread2</code> are cpu-bound, so running in
   parallel helps.
@@ -515,13 +513,13 @@ if __name__ == "__main__":
     answers: [
       `TODO
 `,
+      `TODO
+`,
       `Exception
 here
 `,
-      `TODO
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>
   Same story as for threads: the exception is printed on stderr but doesn't
   propagate to the main process.
@@ -551,11 +549,11 @@ asyncio.run(main())
 `,
     answers: [
       `here
-`,
-      `here
 <~3s>
 done
 done
+`,
+      `here
 `,
       `<~3s>
 done
@@ -564,7 +562,7 @@ done
 here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>
   A function defined with <code>async def</code> is a coroutine function and
   returns a coroutine.
@@ -595,6 +593,11 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `<~3s>
+done
+done
+here
+`,
       `here
 <~3s>
 done
@@ -606,13 +609,8 @@ done
 done
 here
 `,
-      `<~3s>
-done
-done
-here
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>Awaiting a coroutine blocks until it completes.</p>
 
 <p>No speedup yet.</p>
@@ -641,12 +639,12 @@ asyncio.run(main())
     answers: [
       `<~3s>
 here
+<~3s>
 here
 done
 `,
       `<~3s>
 here
-<~3s>
 here
 done
 `,
@@ -656,7 +654,7 @@ here
 here
 `,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>
   <code>await asyncio.sleep()</code> does pass control to the event loop, but
   there's no other work scheduled at that point.
@@ -684,12 +682,6 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
       `here
 <~3s>
 done
@@ -697,11 +689,17 @@ done
 `,
       `<~3s>
 done
+<~3s>
+done
+here
+`,
+      `<~3s>
+done
 done
 here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>Still no speedup: <code>sleep()</code> blocks the one and only thread.</p>
 `,
   },
@@ -827,16 +825,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `in main
-in foo
+      `it depends
 `,
       `in foo
 in main
 `,
-      `it depends
+      `in main
+in foo
 `,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p><code>create_task()</code> schedules the task for execution.</p>
 
 <p>But no <code>await</code>, so the main coroutine keeps control.</p>
@@ -861,13 +859,13 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `in main
-in foo
+      `it depends
 `,
       `in foo
 in main
 `,
-      `it depends
+      `in main
+in foo
 `,
     ],
     correct: 1,
@@ -897,16 +895,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `it depends
-`,
       `in foo
 in bar
 `,
       `in bar
 in foo
 `,
+      `it depends
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>Awaiting a coroutine doesn't pass control to the event loop.</p>
 `,
   },
@@ -933,10 +931,10 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `it depends
+`,
       `in bar
 in foo
-`,
-      `it depends
 `,
       `in foo
 in bar
@@ -970,16 +968,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `Exception
+      `done
 `,
       `<~3s>
 here
 done
 `,
-      `done
+      `Exception
 `,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>
   By default, <code>gather()</code> propagates the first raised exception, but
   <em>doesn't</em> cancel its other awaitables.

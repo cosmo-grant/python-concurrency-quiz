@@ -2,7 +2,8 @@ from threading import Thread
 
 
 def cpu_bound():
-    sum(range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(range(2**25))
     print("done")
 
 

@@ -2,7 +2,8 @@ from multiprocessing import Process
 
 
 def cpu_bound():
-    sum(i**2 for i in range(2**25))  # assume takes 3s of cpu
+    # assume the sum takes 3s of cpu
+    sum(i**2 for i in range(2**25))
     print("done")
 
 
