@@ -136,6 +136,26 @@ class Quiz {
         }
       }
 
+      // Arrow keys to move between viewable questions.
+      if (
+        event.key === "ArrowLeft" &&
+        !this.mainContent.hidden &&
+        this.viewedQuestion - 1 >= 0
+      ) {
+        event.preventDefault();
+        const navButton = this.navButtons[this.viewedQuestion - 1];
+        navButton.dispatchEvent(new Event("click"));
+      }
+
+      if (
+        event.key === "ArrowRight" &&
+        !this.mainContent.hidden &&
+        this.viewedQuestion + 1 <= this.currentQuestion
+      ) {
+        event.preventDefault();
+        const navButton = this.navButtons[this.viewedQuestion + 1];
+        navButton.dispatchEvent(new Event("click"));
+      }
       // Number keys to select answers.
       if (
         event.key >= "1" &&
@@ -211,6 +231,7 @@ class Quiz {
 
   loadQuestion(index) {
     const question = QUESTIONS[index];
+    this.viewedQuestion = index;
     this.codeDisplay.textContent = question.code;
     this.codeDisplay.removeAttribute("data-highlighted"); // else highlightjs skips re-highlighting
     hljs.highlightElement(this.codeDisplay);
