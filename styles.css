@@ -279,8 +279,8 @@ body {
 
 #code-row > pre {
   /* Fixed height so answers stay in same position */
-  /* height = (lines × font-size × line-height) + (padding × 2) */
-  height: calc(var(--max-snippet-lines) * 1rem * 1.6 + 2rem);
+  /* height = (lines × font-size × line-height) + (padding × 2) + buffer */
+  height: calc(var(--max-snippet-lines) * 1rem * 1.6 + 2rem + 0.25rem);
   border: 1px solid var(--color-border);
   border-radius: 4px;
   overflow-y: auto;
