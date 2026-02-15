@@ -1,7 +1,6 @@
 // Generated automatically. Do not edit.
 
 const QUESTIONS = [
-  
   {
     preface: `<p>What does this output?</p>
 `,
@@ -31,7 +30,7 @@ here
 <p>Simple. Slow.</p>
 `,
   },
-  
+
   {
     preface: `<p>Let's move the work into threads. Output?</p>
 `,
@@ -51,6 +50,12 @@ thread2.start()
 print("here")
 `,
     answers: [
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
       `here
 <~3s>
 done
@@ -61,14 +66,8 @@ here
 done
 done
 `,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>A thread runs only when it holds the Global Interpreter Lock.</p>
 
 <p>
@@ -80,14 +79,9 @@ here
   Thus: when <code>thread1</code> and <code>thread2</code> sleep, the main
   thread runs.
 </p>
-
-<p>
-  <code>thread1</code> and <code>thread2</code> are io-bound, so interleaving
-  helps.
-</p>
 `,
   },
-  
+
   {
     preface: `<p>What if we <code>join()</code> them?</p>
 `,
@@ -114,23 +108,23 @@ done
 done
 here
 `,
+      `here
+<~3s>
+done
+done
+`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
-      `here
-<~3s>
-done
-done
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p><code>join()</code> blocks until the receiver completes.</p>
 `,
   },
-  
+
   {
     preface: `<p>Does re-ordering make a difference?</p>
 `,
@@ -152,16 +146,16 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `here
-<~3s>
-done
-done
-`,
       `<~3s>
 done
 <~3s>
 done
 here
+`,
+      `here
+<~3s>
+done
+done
 `,
       `<~3s>
 done
@@ -174,9 +168,14 @@ here
   <code>thread1.join()</code> blocks the main thread, but not
   <code>thread2</code>.
 </p>
+
+<p>
+  <code>thread1</code> and <code>thread2</code> are io-bound, so interleaving
+  helps.
+</p>
 `,
   },
-  
+
   {
     preface: `<p>How about cpu-bound threads?</p>
 `,
@@ -196,23 +195,23 @@ thread2.start()
 print("here")
 `,
     answers: [
-      `<~6s>
+      `here
+<~6s>
 done
 done
-here
 `,
       `here
 <~3s>
 done
 done
 `,
-      `here
-<~6s>
+      `<~6s>
 done
 done
+here
 `,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>
   The main thread runs when <code>thread1</code> and <code>thread2</code> are
   paused.
@@ -224,7 +223,7 @@ done
 </p>
 `,
   },
-  
+
   {
     preface: `<p>Ok, let's <code>join()</code> again.</p>
 `,
@@ -248,12 +247,6 @@ print("here")
     answers: [
       `<~3s>
 done
-<~3s>
-done
-here
-`,
-      `<~3s>
-done
 done
 here
 `,
@@ -262,12 +255,18 @@ here
 done
 done
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>Same as before: <code>join()</code> blocks until the receiver completes.</p>
 `,
   },
-  
+
   {
     preface: `<p>Does re-ordering make a difference?</p>
 `,
@@ -289,10 +288,11 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `<~6s>
+      `here
+<~3s>
 done
+<~3s>
 done
-here
 `,
       `<~3s>
 done
@@ -300,14 +300,13 @@ done
 done
 here
 `,
-      `here
-<~3s>
+      `<~6s>
 done
-<~3s>
 done
+here
 `,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>
   <code>thread1.join()</code> blocks the main thread, not <code>thread2</code>.
 </p>
@@ -315,7 +314,7 @@ done
 <p>But they're still cpu-bound so the total time is unchanged.</p>
 `,
   },
-  
+
   {
     preface: `<p>Same as the previous question, no?</p>
 `,
@@ -343,12 +342,12 @@ done
 done
 here
 `,
-      `<~3s>
+      `<~6s>
 done
 done
 here
 `,
-      `<~6s>
+      `<~3s>
 done
 done
 here
@@ -361,7 +360,7 @@ here
 </p>
 `,
   },
-  
+
   {
     preface: `<p>What if threads go bad?</p>
 `,
@@ -378,15 +377,15 @@ thread.join()
 print("here")
 `,
     answers: [
-      `here
-`,
       `Exception
 `,
       `Exception
 here
 `,
+      `here
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>
   <code>threading.excepthook()</code> prints on stderr an exception raised by
   <code>Thread.run()</code>.
@@ -398,7 +397,7 @@ here
 </p>
 `,
   },
-  
+
   {
     preface: `<p>Let's swap threads for processes.</p>
 `,
@@ -445,7 +444,7 @@ here
 <p>But for io-bound work threads might be the better choice.</p>
 `,
   },
-  
+
   {
     preface: `<p>What about cpu-bound work?</p>
 `,
@@ -471,6 +470,7 @@ if __name__ == "__main__":
     answers: [
       `<~3s>
 done
+<~3s>
 done
 here
 `,
@@ -481,19 +481,18 @@ here
 `,
       `<~3s>
 done
-<~3s>
 done
 here
 `,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>
   <code>thread1</code> and <code>thread2</code> are cpu-bound, so running in
   parallel helps.
 </p>
 `,
   },
-  
+
   {
     preface: `<p>What if processes go bad?</p>
 `,
@@ -513,20 +512,20 @@ if __name__ == "__main__":
     answers: [
       `TODO
 `,
-      `TODO
-`,
       `Exception
 here
 `,
+      `TODO
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>
   Same story as for threads: the exception is printed on stderr but doesn't
   propagate to the main process.
 </p>
 `,
   },
-  
+
   {
     preface: `<p>A third approach: <code>asyncio</code>.</p>
 `,
@@ -571,7 +570,7 @@ here
 <p>Just creating a coroutine doens't schedule it on the event loop.</p>
 `,
   },
-  
+
   {
     preface: `<p>Ok, so let's <code>await</code>.</p>
 `,
@@ -616,7 +615,7 @@ here
 <p>No speedup yet.</p>
 `,
   },
-  
+
   {
     preface: `<p>We need async-aware functions, like <code>asyncio.sleep()</code>, right?</p>
 `,
@@ -639,12 +638,12 @@ asyncio.run(main())
     answers: [
       `<~3s>
 here
-<~3s>
 here
 done
 `,
       `<~3s>
 here
+<~3s>
 here
 done
 `,
@@ -654,14 +653,14 @@ here
 here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>
   <code>await asyncio.sleep()</code> does pass control to the event loop, but
   there's no other work scheduled at that point.
 </p>
 `,
   },
-  
+
   {
     preface: `<p>What if we <code>gather()</code> them?</p>
 `,
@@ -689,21 +688,21 @@ done
 `,
       `<~3s>
 done
-<~3s>
 done
 here
 `,
       `<~3s>
 done
+<~3s>
 done
 here
 `,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>Still no speedup: <code>sleep()</code> blocks the one and only thread.</p>
 `,
   },
-  
+
   {
     preface: `<p>Any speedup?</p>
 `,
@@ -723,6 +722,12 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
       `here
 <~3s>
 done
@@ -733,14 +738,8 @@ done
 done
 here
 `,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>Speedup at last!</p>
 
 <p><code>asyncio</code> relies on async-aware functions.</p>
@@ -751,7 +750,7 @@ here
 </p>
 `,
   },
-  
+
   {
     preface: `<p>Remember threads?</p>
 `,
@@ -775,24 +774,24 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
-      `<~3s>
-done
-done
-here
-`,
       `here
 <~3s>
 done
 done
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
+      `<~3s>
+done
+done
+here
+`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>
   <code>asyncio.to_thread()</code> is useful for async-unaware io-bound
   functions.
@@ -806,7 +805,7 @@ done
 </p>
 `,
   },
-  
+
   {
     preface: `<p>Know the differences between coroutines and tasks?</p>
 `,
@@ -840,7 +839,7 @@ in foo
 <p>But no <code>await</code>, so the main coroutine keeps control.</p>
 `,
   },
-  
+
   {
     preface: `<p>How about this?</p>
 `,
@@ -859,20 +858,20 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `it depends
+      `in main
+in foo
 `,
       `in foo
 in main
 `,
-      `in main
-in foo
+      `it depends
 `,
     ],
     correct: 1,
     explanation: `<p>Awaiting a task passes control to the event loop.</p>
 `,
   },
-  
+
   {
     preface: `<p>And this?</p>
 `,
@@ -908,7 +907,7 @@ in foo
     explanation: `<p>Awaiting a coroutine doesn't pass control to the event loop.</p>
 `,
   },
-  
+
   {
     preface: `<p>Last one on this theme.</p>
 `,
@@ -931,20 +930,20 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `in foo
+in bar
+`,
       `it depends
 `,
       `in bar
 in foo
 `,
-      `in foo
-in bar
-`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>Awaiting a task passes control to the event loop.</p>
 `,
   },
-  
+
   {
     preface: `<p>What if awaitables go bad?</p>
 `,
@@ -968,16 +967,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `Exception
+`,
       `done
 `,
       `<~3s>
 here
 done
 `,
-      `Exception
-`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>
   By default, <code>gather()</code> propagates the first raised exception, but
   <em>doesn't</em> cancel its other awaitables.
@@ -988,5 +987,4 @@ done
 </p>
 `,
   },
-  
 ];
