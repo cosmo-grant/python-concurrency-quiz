@@ -227,13 +227,6 @@ body {
   padding: var(--space-lg);
 }
 
-/* Score display */
-#main-content > div:first-child {
-  margin-bottom: var(--space-md);
-  font-size: 0.875rem;
-  color: var(--color-text-muted);
-}
-
 /* Preface text (question prompt) */
 #preface-text {
   margin-bottom: var(--space-md);

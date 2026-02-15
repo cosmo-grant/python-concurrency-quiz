@@ -18,7 +18,6 @@ class Quiz {
       this.continueFromSavedButton.addEventListener("click", () => {
         this.currentQuestion = savedState.currentQuestion;
         this.answers = savedState.answers;
-        this.updateScore();
         this.startQuiz();
       });
 
@@ -43,7 +42,6 @@ class Quiz {
 
     this.codeDisplay = document.getElementById("code-display");
     this.prefaceText = document.getElementById("preface-text");
-    this.scoreDigit = document.getElementById("score-digit");
     this.nextButton = document.getElementById("next-button");
     this.startQuizButton = document.getElementById("start-quiz-button");
     this.answerButtons = [
@@ -214,10 +212,6 @@ class Quiz {
     ).length;
   }
 
-  updateScore() {
-    this.scoreDigit.textContent = this.computeScore();
-  }
-
   restart() {
     this.clearState();
     this.currentQuestion = 0;
@@ -297,7 +291,6 @@ class Quiz {
     const isCorrect = correctIndex === selectedIndex;
     this.answers[this.currentQuestion] = selectedIndex;
     this.saveState();
-    this.updateScore();
 
     // Update answer buttons: show selected and correct
     this.answerButtons[selectedIndex].classList.add("selected");
