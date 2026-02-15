@@ -524,15 +524,7 @@ pre {
 
 #final-score-section p {
   margin: 0 0 var(--space-md) 0;
-  font-size: 1.25rem;
-}
-
-#final-score-value {
-  font-weight: bold;
-}
-
-#final-score-message {
-  font-size: 2.125rem;
+  font-size: 4rem;
   font-weight: bold;
 }
 

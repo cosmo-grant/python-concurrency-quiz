@@ -340,18 +340,18 @@ class Quiz {
     const percentage = (this.score / QUESTIONS.length) * 100; // use % in case question count changes
 
     if (percentage === 100) {
-      message = "A";
+      message = "&#x1f92f;";
     } else if (percentage >= 80) {
-      message = "B";
+      message = "&#x1f60e;";
     } else if (percentage >= 60) {
-      message = "C";
+      message = "&#x1f642;";
     } else if (percentage >= 40) {
-      message = "D";
+      message = "&#x1f62c;";
     } else {
-      message = "F";
+      message = "&#x1f648;";
     }
 
-    this.finalScoreMessage.textContent = message;
+    this.finalScoreMessage.innerHTML = message;
   }
 
   // should be called after any state-changing action
