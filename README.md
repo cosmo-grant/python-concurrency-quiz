@@ -8,7 +8,7 @@ A bit of fun.
 
 ## What does it cover?
 
-Multithreading, multiprocessing, asyncio.
+Threads, processes, asyncio.
 The fundamental concepts, not the high-level APIs.
 As of 3.14, with the GIL.
 
@@ -23,18 +23,19 @@ I used Opus 4.5 in OpenCode for styling.
 Transcripts in `transcripts/`.
 I wrote everything else, following the example of [fstrings-wtf](https://github.com/mitsuhiko/fstrings-wtf/).
 
-## Don't the outputs depend on the machine?
+## Don't the timings depend on the machine?
 
 Yes.
 Whether it's single- or multi-core.
 Whether it's fast or slow.
 Whether it's busy or idle.
+Whether it's on battery.
 Whether the power cuts out mid-execution.
 And more.
 
-Some snippets have comments asking you to make this or that assumption.
-Otherwise assume a typical modern machine under normal conditions.
-I checked all the snippets on a MacBook Pro M3.
+Some snippets have comments asking you to assume this or that.
+Generally, assume a typical machine under normal conditions.
+I checked the snippets on a MacBook Pro M3.
 
 ## How did you check the snippets?
 
@@ -44,10 +45,10 @@ Using [snippet-checker](https://github.com/cosmo-grant/snippet-checker).
 
 Great! Please open an issue.
 
-## Suggestion for improvement?
+## Have a suggestion?
 
 Great! Please open an issue.
 
 ## Want more questions like these?
 
-You might like my [anki decks](https://ankiweb.net/shared/by-author/1924308445).
+You might like [my anki deck](https://ankiweb.net/shared/info/1924308445).
