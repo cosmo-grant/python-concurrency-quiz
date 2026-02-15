@@ -203,22 +203,26 @@ body {
 
 #nav-bar {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
+  flex-wrap: nowrap;
+  gap: 0.125rem;
   justify-content: center;
-  margin-bottom: var(--space-lg);
+  max-width: 46rem;
+  margin: 0 auto var(--space-lg);
+  padding: var(--space-lg) var(--space-lg) 0;
+  overflow-x: auto;
 }
 
 #nav-bar button {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 1.75rem;
   padding: 0;
   border: 2px solid var(--color-border);
   border-radius: 4px;
   background-color: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.75rem;
   transition:
     background-color 0.1s,
     border-color 0.1s,
