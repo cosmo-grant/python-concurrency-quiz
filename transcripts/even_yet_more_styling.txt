@@ -1,0 +1,4566 @@
+# Styling long button text wrap plan
+
+**Session ID:** ses_39c801436ffe4P3W9UoXxT7ATD
+**Created:** 2/15/2026, 10:50:53 PM
+**Updated:** 2/15/2026, 11:17:11 PM
+
+---
+
+## User
+
+styling issue. some of the answer button texts have long lines, which wrap, making the full text overflow the button. what can we do? For the desktop it might be sufficient to make the layout wider so no wrapping required. For mobile, maybe we stack the answer buttons vertically instead of horizontally? Plan a robust solution.
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 4.2s)
+
+I'll analyze the current styling to understand the issue and propose a robust solution. Let me first examine the existing CSS and HTML structure.
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/index.html"
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/index.html</path>
+<type>file</type>
+<content>1: <!doctype html>
+2: <html lang="en-UK">
+3:   <head>
+4:     <meta charset="utf-8" />
+5:     <meta name="viewport" content="width=device-width, initial-scale=1" />
+6:     <title>Python Concurrency Quiz</title>
+7:     <meta name="author" content="Cosmo Grant" />
+8:     <meta
+9:       name="description"
+10:       content="Test your knowledge of Python concurrency with this interactive quiz."
+11:     />
+12:     <link rel="stylesheet" href="questions-vars.css" />
+13:     <link rel="stylesheet" href="styles.css" />
+14:   </head>
+15: 
+16:   <body>
+17:     <div id="splash-screen">
+18:       <div>
+19:         <h1>Think you know Python concurrency?</h1>
+20:         <p>Prove it.</p>
+21:         <p>
+22:           Questions tested in Python 3.14 with the GIL via
+23:           <a href="https://github.com/cosmo-grant/snippet-checker"
+24:             >snippet-checker</a
+25:           >.
+26:         </p>
+27:         <button id="start-quiz-button">Start Quiz</button>
+28:       </div>
+29:       <footer>
+30:         made by
+31:         <a href="https://github.com/cosmo-grant">cosmo grant</a> &centerdot;
+32:         inspired by <a href="https://fstrings.wtf/">fstrings.wtf</a> &centerdot;
+33:         styled by claude &centerdot;
+34:         <a href="https://github.com/cosmo-grant/python-concurrency-quiz"
+35:           >source</a
+36:         >
+37:       </footer>
+38:     </div>
+39: 
+40:     <div id="nav-bar"></div>
+41: 
+42:     <div id="main-content">
+43:       <div id="preface-text"></div>
+44:       <div id="code-row">
+45:         <pre><code id="code-display" class="lang-python"></code></pre>
+46:       </div>
+47: 
+48:       <div id="answers-row">
+49:         <button id="answer-0">
+50:           <pre><samp id="answer-0-text"></samp></pre>
+51:         </button>
+52:         <button id="answer-1">
+53:           <pre><samp id="answer-1-text"></samp></pre>
+54:         </button>
+55:         <button id="answer-2">
+56:           <pre><samp id="answer-2-text"></samp></pre>
+57:         </button>
+58:       </div>
+59: 
+60:       <div id="explanation-section">
+61:         <div id="explanation-text"></div>
+62:       </div>
+63: 
+64:       <div id="nav-buttons">
+65:         <button id="next-button">&gt;</button>
+66:         <button id="finish-button">&gt;&gt;</button>
+67:       </div>
+68:     </div>
+69: 
+70:     <div id="final-score-section">
+71:       <p>
+72:         <span id="final-score-value"></span>/<span id="final-score-max"></span>
+73:       </p>
+74:       <p id="final-score-message"></p>
+75:       <button id="restart-button">Restart</button>
+76:     </div>
+77: 
+78:     <div id="continue-dialog">
+79:       <div>
+80:         <div>
+81:           <h3>Continue Quiz?</h3>
+82:         </div>
+83:         <div>
+84:           <p>You have a saved quiz in progress:</p>
+85:           <p>
+86:             <strong>Question:</strong>
+87:             <span id="saved-question-dialog"></span> of
+88:             <span id="total-questions-dialog">?</span>
+89:           </p>
+90:           <p><strong>Score:</strong> <span id="saved-score-dialog"></span></p>
+91:           <div>
+92:             <button id="continue-from-saved-button">Continue</button>
+93:             <button id="restart-from-saved-button">Restart</button>
+94:           </div>
+95:         </div>
+96:       </div>
+97:     </div>
+98:     <link rel="stylesheet" href="hljs-theme.css" />
+99:     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+100:     <script src="questions.js"></script>
+101:     <script src="quiz.js"></script>
+102:   </body>
+103: </html>
+104: 
+
+(End of file - total 104 lines)
+</content>
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 3.3s)
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css"
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>1: /* ===========================================
+2:    CSS for Python Concurrency Quiz
+3:    =========================================== */
+4: 
+5: /* -------------------------------------------
+6:    Minimal Reset
+7:    
+8:    Gets us to a consistent starting point
+9:    across all browsers.
+10:    ------------------------------------------- */
+11: 
+12: *,
+13: *::before,
+14: *::after {
+15:   box-sizing: border-box;
+16: }
+17: 
+18: body {
+19:   margin: 0;
+20: }
+21: 
+22: button {
+23:   font: inherit;
+24: }
+25: 
+26: /* Focus states for accessibility */
+27: button:focus-visible,
+28: a:focus-visible {
+29:   outline: 2px solid var(--color-primary);
+30:   outline-offset: 2px;
+31: }
+32: 
+33: /* -------------------------------------------
+34:    CSS Custom Properties (Variables)
+35:    
+36:    Light mode is the default.
+37:    Dark mode overrides via media query below.
+38:    ------------------------------------------- */
+39: 
+40: :root {
+41:   /* Base colors */
+42:   --color-bg: #ffffff;
+43:   --color-bg-secondary: #f5f5f5;
+44:   --color-text: #1a1a1a;
+45:   --color-text-muted: #666666;
+46: 
+47:   /* Interactive elements */
+48:   --color-primary: #0066cc;
+49:   --color-primary-hover: #0052a3;
+50: 
+51:   /* Feedback colors */
+52:   --color-correct: #2e7d32;
+53: 
+54:   /* Borders */
+55:   --color-border: #dddddd;
+56: 
+57:   /* Spacing scale */
+58:   --space-xs: 0.25rem;
+59:   --space-sm: 0.5rem;
+60:   --space-md: 1rem;
+61:   --space-lg: 1.5rem;
+62:   --space-xl: 2rem;
+63: 
+64:   /* Typography */
+65:   --font-sans: system-ui, -apple-system, sans-serif;
+66:   --font-mono: ui-monospace, "Cascadia Code", "Consolas", monospace;
+67:   --font-size-base: 1.0625rem;
+68:   --line-height: 1.5;
+69: }
+70: 
+71: /* Dark mode overrides */
+72: @media (prefers-color-scheme: dark) {
+73:   :root {
+74:     --color-bg: #1a1a1a;
+75:     --color-bg-secondary: #2d2d2d;
+76:     --color-text: #e0e0e0;
+77:     --color-text-muted: #a0a0a0;
+78: 
+79:     --color-primary: #4da6ff;
+80:     --color-primary-hover: #80bfff;
+81: 
+82:     --color-correct: #66bb6a;
+83: 
+84:     --color-border: #444444;
+85:   }
+86: }
+87: 
+88: /* -------------------------------------------
+89:    Base Styles
+90:    
+91:    Apply variables to fundamental elements.
+92:    ------------------------------------------- */
+93: 
+94: body {
+95:   font-family: var(--font-sans);
+96:   font-size: var(--font-size-base);
+97:   line-height: var(--line-height);
+98:   color: var(--color-text);
+99:   background-color: var(--color-bg);
+100: }
+101: 
+102: /* Ensure hidden attribute works even with display overrides */
+103: [hidden] {
+104:   display: none !important;
+105: }
+106: 
+107: /* -------------------------------------------
+108:    Splash Screen
+109:    ------------------------------------------- */
+110: 
+111: #splash-screen {
+112:   /* Center content vertically and horizontally */
+113:   min-height: 100vh;
+114:   display: flex;
+115:   flex-direction: column;
+116:   justify-content: center;
+117:   align-items: center;
+118:   padding: var(--space-lg);
+119:   text-align: center;
+120: }
+121: 
+122: /* Splash screen fade-in animation */
+123: @keyframes fadeIn {
+124:   from {
+125:     opacity: 0;
+126:   }
+127:   to {
+128:     opacity: 1;
+129:   }
+130: }
+131: 
+132: #splash-screen h1,
+133: #splash-screen p,
+134: #splash-screen button,
+135: #splash-screen footer {
+136:   opacity: 0;
+137:   animation: fadeIn 1s ease forwards;
+138: }
+139: 
+140: #splash-screen h1 {
+141:   margin: 0 0 var(--space-md) 0;
+142:   font-size: 2.125rem;
+143:   animation-delay: 1.5s;
+144: }
+145: 
+146: #splash-screen p:first-of-type {
+147:   font-size: 1.5rem;
+148:   animation-delay: 3s;
+149: }
+150: 
+151: #splash-screen p:nth-of-type(2),
+152: #splash-screen button,
+153: #splash-screen footer {
+154:   animation-delay: 4.5s;
+155: }
+156: 
+157: #splash-screen p {
+158:   margin: 0 0 var(--space-md) 0;
+159:   color: var(--color-text-muted);
+160: }
+161: 
+162: #splash-screen a {
+163:   color: var(--color-primary);
+164: }
+165: 
+166: #splash-screen a:hover {
+167:   color: var(--color-primary-hover);
+168: }
+169: 
+170: #start-quiz-button {
+171:   margin-top: var(--space-md);
+172:   padding: var(--space-sm) var(--space-lg);
+173:   font-size: var(--font-size-base);
+174:   color: #ffffff;
+175:   background-color: var(--color-primary);
+176:   border: none;
+177:   border-radius: 4px;
+178:   cursor: pointer;
+179: }
+180: 
+181: #start-quiz-button:hover {
+182:   background-color: var(--color-primary-hover);
+183: }
+184: 
+185: #splash-screen footer {
+186:   position: absolute;
+187:   bottom: var(--space-lg);
+188:   color: var(--color-text-muted);
+189:   font-size: 0.9375rem;
+190: }
+191: 
+192: #splash-screen footer a {
+193:   color: var(--color-text-muted);
+194: }
+195: 
+196: #splash-screen footer a:hover {
+197:   color: var(--color-primary);
+198: }
+199: 
+200: /* -------------------------------------------
+201:    Navigation Bar
+202:    ------------------------------------------- */
+203: 
+204: #nav-bar {
+205:   display: flex;
+206:   flex-wrap: nowrap;
+207:   gap: 0.125rem;
+208:   justify-content: center;
+209:   max-width: 46rem;
+210:   margin: 0 auto var(--space-md);
+211:   padding: var(--space-lg) var(--space-lg) 0;
+212:   overflow-x: auto;
+213: }
+214: 
+215: #nav-bar button {
+216:   width: 1.75rem;
+217:   height: 1.75rem;
+218:   min-width: 1.75rem;
+219:   padding: 0;
+220:   border: 2px solid var(--color-border);
+221:   border-radius: 4px;
+222:   background-color: var(--color-bg);
+223:   color: var(--color-text);
+224:   cursor: pointer;
+225:   font-size: 0.75rem;
+226:   transition:
+227:     background-color 0.1s,
+228:     border-color 0.1s,
+229:     color 0.1s;
+230: }
+231: 
+232: /* Disabled: future questions user hasn't reached yet */
+233: #nav-bar button:disabled {
+234:   opacity: 0.3;
+235:   background-color: var(--color-bg-secondary);
+236:   cursor: not-allowed;
+237: }
+238: 
+239: /* Currently viewing this question - bold border */
+240: #nav-bar button.viewing {
+241:   border-width: 3px;
+242:   border-color: var(--color-text);
+243: }
+244: 
+245: /* Previously answered correctly */
+246: #nav-bar button.correct {
+247:   border-color: var(--color-correct);
+248:   background-color: var(--color-correct);
+249:   color: #ffffff;
+250: }
+251: 
+252: /* Viewing + correct: keep green, add bold border */
+253: #nav-bar button.viewing.correct {
+254:   border-color: var(--color-text);
+255: }
+256: 
+257: /* Mobile: allow nav buttons to wrap instead of scroll */
+258: @media (max-width: 480px) {
+259:   #nav-bar {
+260:     flex-wrap: wrap;
+261:     overflow-x: visible;
+262:   }
+263: }
+264: 
+265: /* -------------------------------------------
+266:    Main Content Layout
+267:    ------------------------------------------- */
+268: 
+269: #main-content {
+270:   position: relative;
+271:   max-width: 36rem;
+272:   margin: 0 auto;
+273:   padding: 0.75rem var(--space-lg) var(--space-lg);
+274: }
+275: 
+276: /* Preface text (question prompt) */
+277: #preface-text {
+278:   margin-bottom: var(--space-md);
+279: }
+280: 
+281: #preface-text p {
+282:   margin: 0;
+283: }
+284: 
+285: /* -------------------------------------------
+286:    Code Display
+287:    ------------------------------------------- */
+288: 
+289: #code-row {
+290:   position: relative;
+291: }
+292: 
+293: #code-row > pre {
+294:   /* Fixed height so answers stay in same position */
+295:   /* height = (lines × font-size × line-height) + (padding × 2) + buffer */
+296:   height: calc(var(--max-snippet-lines) * 0.9375rem * 1.6 + 2rem + 0.25rem);
+297:   border: 1px solid var(--color-border);
+298:   border-radius: 4px;
+299:   overflow-y: auto;
+300:   background: #fff;
+301: }
+302: 
+303: @media (prefers-color-scheme: dark) {
+304:   #code-row > pre {
+305:     background: #0d1117;
+306:   }
+307: }
+308: 
+309: #code-display {
+310:   display: block;
+311:   width: 100%;
+312:   padding: var(--space-md);
+313:   font-family: var(--font-mono);
+314:   font-size: 0.9375rem;
+315:   line-height: 1.6;
+316:   overflow-x: auto;
+317: }
+318: 
+319: pre {
+320:   margin: 0;
+321: }
+322: 
+323: /* -------------------------------------------
+324:    Answer Buttons
+325:    ------------------------------------------- */
+326: 
+327: /* Container for answer buttons and next button */
+328: #answers-row {
+329:   display: flex;
+330:   flex-direction: row;
+331:   gap: var(--space-sm);
+332:   margin: var(--space-lg) 0;
+333: }
+334: 
+335: /* Stack answer buttons on narrow screens */
+336: @media (max-width: 480px) {
+337:   #answers-row {
+338:     flex-wrap: wrap;
+339:   }
+340: 
+341:   #answer-0,
+342:   #answer-1,
+343:   #answer-2 {
+344:     flex: 1 1 100%;
+345:   }
+346: }
+347: 
+348: /* Base answer button styles */
+349: #answer-0,
+350: #answer-1,
+351: #answer-2 {
+352:   flex: 1;
+353:   /* Fixed height based on max answer lines */
+354:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+355:   padding: var(--space-sm) var(--space-md);
+356:   border: 2px solid var(--color-border);
+357:   border-radius: 4px;
+358:   background-color: var(--color-bg);
+359:   color: var(--color-text);
+360:   text-align: left;
+361:   cursor: pointer;
+362:   transition:
+363:     background-color 0.1s,
+364:     border-color 0.1s,
+365:     color 0.1s;
+366:   /* Top-align content */
+367:   display: flex;
+368:   align-items: flex-start;
+369: }
+370: 
+371: #answer-0:hover:not(:disabled),
+372: #answer-1:hover:not(:disabled),
+373: #answer-2:hover:not(:disabled) {
+374:   border-color: var(--color-primary);
+375: }
+376: 
+377: #answer-0:disabled,
+378: #answer-1:disabled,
+379: #answer-2:disabled {
+380:   cursor: default;
+381: }
+382: 
+383: /* Answer button text (preserve whitespace for output formatting) */
+384: #answer-0 pre,
+385: #answer-1 pre,
+386: #answer-2 pre {
+387:   margin: 0;
+388:   font-family: var(--font-mono);
+389:   font-size: 0.9375rem;
+390:   white-space: pre-wrap;
+391: }
+392: 
+393: /* Selected answer (the one user clicked) - bold border */
+394: #answer-0.selected,
+395: #answer-1.selected,
+396: #answer-2.selected {
+397:   border-width: 3px;
+398:   border-color: var(--color-text);
+399: }
+400: 
+401: /* Correct answer - green */
+402: #answer-0.correct,
+403: #answer-1.correct,
+404: #answer-2.correct {
+405:   border-color: var(--color-correct);
+406:   background-color: var(--color-correct);
+407:   color: #ffffff;
+408: }
+409: 
+410: /* Selected + correct: green background, bold border */
+411: #answer-0.selected.correct,
+412: #answer-1.selected.correct,
+413: #answer-2.selected.correct {
+414:   border-color: var(--color-text);
+415: }
+416: 
+417: /* -------------------------------------------
+418:    Explanation Section
+419:    ------------------------------------------- */
+420: 
+421: #explanation-section {
+422:   margin: var(--space-lg) 0;
+423: }
+424: 
+425: #explanation-text {
+426:   line-height: var(--line-height);
+427: }
+428: 
+429: #explanation-text p {
+430:   margin: 0 0 var(--space-sm) 0;
+431: }
+432: 
+433: #explanation-text p:last-child {
+434:   margin-bottom: 0;
+435: }
+436: 
+437: #explanation-text code {
+438:   font-family: var(--font-mono);
+439:   font-size: 0.875em;
+440:   background-color: var(--color-bg);
+441:   padding: 0.1em 0.3em;
+442:   border-radius: 3px;
+443: }
+444: 
+445: /* -------------------------------------------
+446:    Action Buttons (Next, Finish, Restart)
+447:    ------------------------------------------- */
+448: 
+449: /* Nav buttons container - below explanation on mobile, beside code on desktop */
+450: #nav-buttons {
+451:   display: flex;
+452:   gap: var(--space-sm);
+453:   margin-top: var(--space-md);
+454: }
+455: 
+456: #next-button,
+457: #finish-button {
+458:   flex: 1;
+459:   height: 2.5rem;
+460:   padding: 0;
+461:   font-size: 1.5rem;
+462:   color: var(--color-text-muted);
+463:   background-color: var(--color-bg);
+464:   border: 1px solid var(--color-border);
+465:   border-radius: 4px;
+466:   cursor: pointer;
+467: }
+468: 
+469: #next-button:hover,
+470: #finish-button:hover {
+471:   color: var(--color-text);
+472:   border-color: var(--color-text);
+473: }
+474: 
+475: /* Desktop: position nav buttons beside code block */
+476: @media (min-width: 481px) {
+477:   #nav-buttons {
+478:     position: absolute;
+479:     /* top = padding + preface line height + preface margin */
+480:     top: calc(
+481:       0.75rem + var(--font-size-base) * var(--line-height) + var(--space-md)
+482:     );
+483:     right: calc(-1 * (var(--space-md) + 2.5rem));
+484:     flex-direction: column;
+485:     width: 2.5rem;
+486:     height: calc(var(--max-snippet-lines) * 0.9375rem * 1.6 + 2rem + 0.25rem);
+487:     margin-top: 0;
+488:   }
+489: 
+490:   #next-button,
+491:   #finish-button {
+492:     flex: 1;
+493:     width: 2.5rem;
+494:   }
+495: }
+496: 
+497: #restart-button {
+498:   padding: var(--space-sm) var(--space-lg);
+499:   font-size: var(--font-size-base);
+500:   color: #ffffff;
+501:   background-color: var(--color-primary);
+502:   border: none;
+503:   border-radius: 4px;
+504:   cursor: pointer;
+505: }
+506: 
+507: #restart-button:hover {
+508:   background-color: var(--color-primary-hover);
+509: }
+510: 
+511: /* -------------------------------------------
+512:    Final Score Section
+513:    ------------------------------------------- */
+514: 
+515: #final-score-section {
+516:   min-height: 100vh;
+517:   display: flex;
+518:   flex-direction: column;
+519:   justify-content: center;
+520:   align-items: center;
+521:   padding: var(--space-lg);
+522:   text-align: center;
+523: }
+524: 
+525: #final-score-section p {
+526:   margin: 0 0 var(--space-md) 0;
+527:   font-size: 4rem;
+528:   font-weight: bold;
+529: }
+530: 
+531: /* -------------------------------------------
+532:    Continue Dialog
+533:    ------------------------------------------- */
+534: 
+535: #continue-dialog {
+536:   min-height: 100vh;
+537:   display: flex;
+538:   justify-content: center;
+539:   align-items: center;
+540:   padding: var(--space-lg);
+541: }
+542: 
+543: #continue-dialog > div {
+544:   max-width: 24rem;
+545:   padding: var(--space-lg);
+546:   background-color: var(--color-bg-secondary);
+547:   border: 1px solid var(--color-border);
+548:   border-radius: 4px;
+549:   text-align: center;
+550: }
+551: 
+552: #continue-dialog h3 {
+553:   margin: 0 0 var(--space-md) 0;
+554: }
+555: 
+556: #continue-dialog p {
+557:   margin: 0 0 var(--space-sm) 0;
+558: }
+559: 
+560: #continue-dialog button {
+561:   margin: var(--space-md) var(--space-xs) 0;
+562:   padding: var(--space-sm) var(--space-md);
+563:   font-size: var(--font-size-base);
+564:   border: 1px solid var(--color-border);
+565:   border-radius: 4px;
+566:   cursor: pointer;
+567: }
+568: 
+569: #continue-from-saved-button {
+570:   color: #ffffff;
+571:   background-color: var(--color-primary);
+572:   border-color: var(--color-primary);
+573: }
+574: 
+575: #continue-from-saved-button:hover {
+576:   background-color: var(--color-primary-hover);
+577:   border-color: var(--color-primary-hover);
+578: }
+579: 
+580: #restart-from-saved-button {
+581:   color: var(--color-text);
+582:   background-color: var(--color-bg);
+583: }
+584: 
+585: #restart-from-saved-button:hover {
+586:   background-color: var(--color-bg-secondary);
+587: }
+588: 
+
+(End of file - total 588 lines)
+</content>
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 5.2s)
+
+Now let me check the CSS variables file and examine the actual questions to understand the answer content:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/questions-vars.css"
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/questions-vars.css</path>
+<type>file</type>
+<content>1: :root {
+2:   --max-snippet-lines: 18;
+3: }
+4: :root {
+5:   --max-answer-lines: 5;
+6: }
+7: 
+
+(End of file - total 7 lines)
+</content>
+```
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/questions.js"
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/questions.js</path>
+<type>file</type>
+<content>1: // Generated automatically. Do not edit.
+2: 
+3: const QUESTIONS = [
+4:   {
+5:     preface: `<p>What does this output?</p>
+6: `,
+7:     code: `from time import sleep
+8: 
+9: sleep(3)
+10: print("done")
+11: sleep(3)
+12: print("done")
+13: print("here")
+14: `,
+15:     answers: [
+16:       `NOT ME!
+17: `,
+18:       `<~3s>
+19: done
+20: <~3s>
+21: done
+22: here
+23: `,
+24:       `NOT ME!
+25: `,
+26:     ],
+27:     correct: 1,
+28:     explanation: `<p>One process, one thread, no event loop.</p>
+29: 
+30: <p>Simple. Slow.</p>
+31: `,
+32:   },
+33: 
+34:   {
+35:     preface: `<p>Let's move the work into threads. Output?</p>
+36: `,
+37:     code: `from threading import Thread
+38: from time import sleep
+39: 
+40: 
+41: def io_bound():
+42:     sleep(3)
+43:     print("done")
+44: 
+45: 
+46: thread1 = Thread(target=io_bound)
+47: thread2 = Thread(target=io_bound)
+48: thread1.start()
+49: thread2.start()
+50: print("here")
+51: `,
+52:     answers: [
+53:       `here
+54: <~3s>
+55: done
+56: done
+57: `,
+58:       `<~3s>
+59: done
+60: <~3s>
+61: done
+62: here
+63: `,
+64:       `<~3s>
+65: here
+66: done
+67: done
+68: `,
+69:     ],
+70:     correct: 0,
+71:     explanation: `<p>A thread runs only when it holds the Global Interpreter Lock.</p>
+72: 
+73: <p>
+74:   The running thread is paused regularly, or when it makes a syscall, and a
+75:   ready thread gets the GIL and runs. Interleaved, not parallel.
+76: </p>
+77: 
+78: <p>
+79:   Thus: when <code>thread1</code> and <code>thread2</code> sleep, the main
+80:   thread runs.
+81: </p>
+82: `,
+83:   },
+84: 
+85:   {
+86:     preface: `<p>What if we <code>join()</code> them?</p>
+87: `,
+88:     code: `from threading import Thread
+89: from time import sleep
+90: 
+91: 
+92: def io_bound():
+93:     sleep(3)
+94:     print("done")
+95: 
+96: 
+97: thread1 = Thread(target=io_bound)
+98: thread2 = Thread(target=io_bound)
+99: thread1.start()
+100: thread1.join()
+101: thread2.start()
+102: thread2.join()
+103: print("here")
+104: `,
+105:     answers: [
+106:       `<~3s>
+107: done
+108: <~3s>
+109: done
+110: here
+111: `,
+112:       `here
+113: <~3s>
+114: done
+115: done
+116: `,
+117:       `<~3s>
+118: done
+119: done
+120: here
+121: `,
+122:     ],
+123:     correct: 0,
+124:     explanation: `<p><code>join()</code> blocks until the receiver completes.</p>
+125: `,
+126:   },
+127: 
+128:   {
+129:     preface: `<p>Does re-ordering make a difference?</p>
+130: `,
+131:     code: `from threading import Thread
+132: from time import sleep
+133: 
+134: 
+135: def io_bound():
+136:     sleep(3)
+137:     print("done")
+138: 
+139: 
+140: thread1 = Thread(target=io_bound)
+141: thread2 = Thread(target=io_bound)
+142: thread1.start()
+143: thread2.start()
+144: thread1.join()
+145: thread2.join()
+146: print("here")
+147: `,
+148:     answers: [
+149:       `here
+150: <~3s>
+151: done
+152: done
+153: `,
+154:       `<~3s>
+155: done
+156: done
+157: here
+158: `,
+159:       `<~3s>
+160: done
+161: <~3s>
+162: done
+163: here
+164: `,
+165:     ],
+166:     correct: 1,
+167:     explanation: `<p>
+168:   <code>thread1.join()</code> blocks the main thread, but not
+169:   <code>thread2</code>.
+170: </p>
+171: 
+172: <p>
+173:   <code>thread1</code> and <code>thread2</code> are io-bound, so interleaving
+174:   helps.
+175: </p>
+176: `,
+177:   },
+178: 
+179:   {
+180:     preface: `<p>How about cpu-bound threads?</p>
+181: `,
+182:     code: `from threading import Thread
+183: 
+184: 
+185: def cpu_bound():
+186:     # assume the sum takes 3s of cpu
+187:     sum(i**2 for i in range(2**25))
+188:     print("done")
+189: 
+190: 
+191: thread1 = Thread(target=cpu_bound)
+192: thread2 = Thread(target=cpu_bound)
+193: thread1.start()
+194: thread2.start()
+195: print("here")
+196: `,
+197:     answers: [
+198:       `here
+199: <~13s>
+200: done
+201: done
+202: `,
+203:       `here
+204: <~3s>
+205: done
+206: done
+207: `,
+208:       `<~6s>
+209: done
+210: done
+211: here
+212: `,
+213:     ],
+214:     correct: 0,
+215:     explanation: `<p>
+216:   The main thread runs when <code>thread1</code> and <code>thread2</code> are
+217:   paused.
+218: </p>
+219: 
+220: <p>
+221:   <code>thread1</code> and <code>thread2</code> are cpu-bound, so interleaving
+222:   doesn't help.
+223: </p>
+224: `,
+225:   },
+226: 
+227:   {
+228:     preface: `<p>Ok, let's <code>join()</code> again.</p>
+229: `,
+230:     code: `from threading import Thread
+231: 
+232: 
+233: def cpu_bound():
+234:     # assume the sum takes 3s of cpu
+235:     sum(i**2 for i in range(2**25))
+236:     print("done")
+237: 
+238: 
+239: thread1 = Thread(target=cpu_bound)
+240: thread2 = Thread(target=cpu_bound)
+241: thread1.start()
+242: thread1.join()
+243: thread2.start()
+244: thread2.join()
+245: print("here")
+246: `,
+247:     answers: [
+248:       `<~3s>
+249: done
+250: done
+251: here
+252: `,
+253:       `<~3s>
+254: done
+255: <~3s>
+256: done
+257: here
+258: `,
+259:       `here
+260: <~6s>
+261: done
+262: done
+263: `,
+264:     ],
+265:     correct: 1,
+266:     explanation: `<p>Same as before: <code>join()</code> blocks until the receiver completes.</p>
+267: `,
+268:   },
+269: 
+270:   {
+271:     preface: `<p>Does re-ordering make a difference?</p>
+272: `,
+273:     code: `from threading import Thread
+274: 
+275: 
+276: def cpu_bound():
+277:     # assume the sum takes 3s of cpu
+278:     sum(i**2 for i in range(2**25))
+279:     print("done")
+280: 
+281: 
+282: thread1 = Thread(target=cpu_bound)
+283: thread2 = Thread(target=cpu_bound)
+284: thread1.start()
+285: thread2.start()
+286: thread1.join()
+287: thread2.join()
+288: print("here")
+289: `,
+290:     answers: [
+291:       `<~3s>
+292: done
+293: <~3s>
+294: done
+295: here
+296: `,
+297:       `here
+298: <~3s>
+299: done
+300: <~3s>
+301: done
+302: `,
+303:       `<~6s>
+304: done
+305: done
+306: here
+307: `,
+308:     ],
+309:     correct: 2,
+310:     explanation: `<p>
+311:   <code>thread1.join()</code> blocks the main thread, not <code>thread2</code>.
+312: </p>
+313: 
+314: <p>But they're still cpu-bound so the total time is unchanged.</p>
+315: `,
+316:   },
+317: 
+318:   {
+319:     preface: `<p>Same as the previous question, no?</p>
+320: `,
+321:     code: `from threading import Thread
+322: 
+323: 
+324: def cpu_bound():
+325:     # assume the sum takes 3s of cpu
+326:     sum(range(2**25))
+327:     print("done")
+328: 
+329: 
+330: thread1 = Thread(target=cpu_bound)
+331: thread2 = Thread(target=cpu_bound)
+332: thread1.start()
+333: thread2.start()
+334: thread1.join()
+335: thread2.join()
+336: print("here")
+337: `,
+338:     answers: [
+339:       `<~3s>
+340: done
+341: done
+342: here
+343: `,
+344:       `<~6s>
+345: done
+346: done
+347: here
+348: `,
+349:       `<~3s>
+350: done
+351: <~3s>
+352: done
+353: here
+354: `,
+355:     ],
+356:     correct: 2,
+357:     explanation: `<p>
+358:   The interpreter doesn't pause a thread while it's running native code, like
+359:   <code>sum()</code> does.
+360: </p>
+361: `,
+362:   },
+363: 
+364:   {
+365:     preface: `<p>What if threads go bad?</p>
+366: `,
+367:     code: `from threading import Thread
+368: 
+369: 
+370: def bad():
+371:     raise Exception
+372: 
+373: 
+374: thread = Thread(target=bad)
+375: thread.start()
+376: thread.join()
+377: print("here")
+378: `,
+379:     answers: [
+380:       `Exception in thread Thread-1 (bad):
+381: Traceback [...]
+382: Exception
+383: here
+384: `,
+385:       `here
+386: `,
+387:       `Exception in thread Thread-1 (bad):
+388: Traceback [...]
+389: Exception
+390: `,
+391:     ],
+392:     correct: 0,
+393:     explanation: `<p>
+394:   <code>threading.excepthook()</code> prints on stderr an exception raised by
+395:   <code>Thread.run()</code>.
+396: </p>
+397: 
+398: <p>
+399:   But the exception doesn't propagate to the main thread, so
+400:   <code>here</code> is still printed and the exit code is 0.
+401: </p>
+402: `,
+403:   },
+404: 
+405:   {
+406:     preface: `<p>Let's swap threads for processes.</p>
+407: `,
+408:     code: `from multiprocessing import Process
+409: from time import sleep
+410: 
+411: 
+412: def io_bound():
+413:     sleep(3)
+414:     print("done")
+415: 
+416: 
+417: if __name__ == "__main__":
+418:     # running on multicore machine
+419:     proc1 = Process(target=io_bound)
+420:     proc2 = Process(target=io_bound)
+421:     proc1.start()
+422:     proc2.start()
+423:     print("here")
+424: `,
+425:     answers: [
+426:       `here
+427: <~3s>
+428: done
+429: done
+430: `,
+431:       `here
+432: <~3s>
+433: done
+434: done
+435: `,
+436:       `<~3s>
+437: done
+438: <~3s>
+439: done
+440: here
+441: `,
+442:     ],
+443:     correct: 0,
+444:     explanation: `<p>Process objects run in separate processes, each with their own GIL.</p>
+445: 
+446: <p>So they <em>can</em> run in parallel.</p>
+447: 
+448: <p>But for io-bound work threads might be the better choice.</p>
+449: `,
+450:   },
+451: 
+452:   {
+453:     preface: `<p>What about cpu-bound work?</p>
+454: `,
+455:     code: `from multiprocessing import Process
+456: 
+457: 
+458: def cpu_bound():
+459:     # assume the sum takes 3s of cpu
+460:     sum(i**2 for i in range(2**25))
+461:     print("done")
+462: 
+463: 
+464: if __name__ == "__main__":
+465:     # running on multicore machine
+466:     proc1 = Process(target=cpu_bound)
+467:     proc2 = Process(target=cpu_bound)
+468:     proc1.start()
+469:     proc2.start()
+470:     proc1.join()
+471:     proc2.join()
+472:     print("here")
+473: `,
+474:     answers: [
+475:       `<~3s>
+476: done
+477: done
+478: here
+479: `,
+480:       `<~6s>
+481: done
+482: done
+483: here
+484: `,
+485:       `<~3s>
+486: done
+487: <~3s>
+488: done
+489: here
+490: `,
+491:     ],
+492:     correct: 0,
+493:     explanation: `<p>
+494:   <code>thread1</code> and <code>thread2</code> are cpu-bound, so running in
+495:   parallel helps.
+496: </p>
+497: `,
+498:   },
+499: 
+500:   {
+501:     preface: `<p>What if processes go bad?</p>
+502: `,
+503:     code: `from multiprocessing import Process
+504: 
+505: 
+506: def bad():
+507:     raise Exception
+508: 
+509: 
+510: if __name__ == "__main__":
+511:     proc = Process(target=bad)
+512:     proc.start()
+513:     proc.join()
+514:     print("here")
+515: `,
+516:     answers: [
+517:       `Process Process-1:
+518: Traceback [...]
+519: Exception
+520: here
+521: `,
+522:       `here
+523: `,
+524:       `Process Process-1:
+525: Traceback [...]
+526: Exception
+527: `,
+528:     ],
+529:     correct: 0,
+530:     explanation: `<p>
+531:   Same story as for threads: the exception is printed on stderr but doesn't
+532:   propagate to the main process.
+533: </p>
+534: `,
+535:   },
+536: 
+537:   {
+538:     preface: `<p>A third approach: <code>asyncio</code>.</p>
+539: `,
+540:     code: `import asyncio
+541: from time import sleep
+542: 
+543: 
+544: async def io_bound():
+545:     sleep(3)
+546:     print("done")
+547: 
+548: 
+549: async def main():
+550:     io_bound()
+551:     io_bound()
+552:     print("here")
+553: 
+554: 
+555: asyncio.run(main())
+556: `,
+557:     answers: [
+558:       `here
+559: <~3s>
+560: done
+561: done
+562: `,
+563:       `<~3s>
+564: done
+565: <~3s>
+566: done
+567: here
+568: `,
+569:       `here
+570: `,
+571:     ],
+572:     correct: 2,
+573:     explanation: `<p>
+574:   A function defined with <code>async def</code> is a coroutine function and
+575:   returns a coroutine.
+576: </p>
+577: 
+578: <p>Just creating a coroutine doens't schedule it on the event loop.</p>
+579: `,
+580:   },
+581: 
+582:   {
+583:     preface: `<p>Ok, so let's <code>await</code>.</p>
+584: `,
+585:     code: `import asyncio
+586: from time import sleep
+587: 
+588: 
+589: async def io_bound():
+590:     sleep(3)
+591:     print("done")
+592: 
+593: 
+594: async def main():
+595:     await io_bound()
+596:     await io_bound()
+597:     print("here")
+598: 
+599: 
+600: asyncio.run(main())
+601: `,
+602:     answers: [
+603:       `here
+604: <~3s>
+605: done
+606: done
+607: `,
+608:       `<~3s>
+609: done
+610: <~3s>
+611: done
+612: here
+613: `,
+614:       `<~3s>
+615: done
+616: done
+617: here
+618: `,
+619:     ],
+620:     correct: 1,
+621:     explanation: `<p>Awaiting a coroutine blocks until it completes.</p>
+622: 
+623: <p>No speedup yet.</p>
+624: `,
+625:   },
+626: 
+627:   {
+628:     preface: `<p>We need async-aware functions, like <code>asyncio.sleep()</code>, right?</p>
+629: `,
+630:     code: `import asyncio
+631: 
+632: 
+633: async def io_bound():
+634:     await asyncio.sleep(3)
+635:     print("here")
+636: 
+637: 
+638: async def main():
+639:     await io_bound()
+640:     await io_bound()
+641:     print("done")
+642: 
+643: 
+644: asyncio.run(main())
+645: `,
+646:     answers: [
+647:       `<~3s>
+648: here
+649: here
+650: done
+651: `,
+652:       `<~3s>
+653: here
+654: <~3s>
+655: here
+656: done
+657: `,
+658:       `done
+659: <~3s>
+660: here
+661: here
+662: `,
+663:     ],
+664:     correct: 1,
+665:     explanation: `<p>
+666:   <code>await asyncio.sleep()</code> does pass control to the event loop, but
+667:   there's no other work scheduled at that point.
+668: </p>
+669: `,
+670:   },
+671: 
+672:   {
+673:     preface: `<p>What if we <code>gather()</code> them?</p>
+674: `,
+675:     code: `import asyncio
+676: from time import sleep
+677: 
+678: 
+679: async def io_bound():
+680:     sleep(3)
+681:     print("done")
+682: 
+683: 
+684: async def main():
+685:     await asyncio.gather(io_bound(), io_bound())
+686:     print("here")
+687: 
+688: 
+689: asyncio.run(main())
+690: `,
+691:     answers: [
+692:       `<~3s>
+693: done
+694: <~3s>
+695: done
+696: here
+697: `,
+698:       `<~3s>
+699: done
+700: done
+701: here
+702: `,
+703:       `here
+704: <~3s>
+705: done
+706: done
+707: `,
+708:     ],
+709:     correct: 0,
+710:     explanation: `<p>Still no speedup: <code>sleep()</code> blocks the one and only thread.</p>
+711: `,
+712:   },
+713: 
+714:   {
+715:     preface: `<p>Any speedup?</p>
+716: `,
+717:     code: `import asyncio
+718: 
+719: 
+720: async def io_bound():
+721:     await asyncio.sleep(3)
+722:     print("done")
+723: 
+724: 
+725: async def main():
+726:     await asyncio.gather(io_bound(), io_bound())
+727:     print("here")
+728: 
+729: 
+730: asyncio.run(main())
+731: `,
+732:     answers: [
+733:       `<~3s>
+734: done
+735: done
+736: here
+737: `,
+738:       `here
+739: <~3s>
+740: done
+741: done
+742: `,
+743:       `<~3s>
+744: done
+745: <~3s>
+746: done
+747: here
+748: `,
+749:     ],
+750:     correct: 0,
+751:     explanation: `<p>Speedup at last!</p>
+752: 
+753: <p><code>asyncio</code> relies on async-aware functions.</p>
+754: 
+755: <p>
+756:   <code>asyncio.sleep()</code>, unlike <code>sleep()</code>, passes control back
+757:   to the event loop, so it can drive other coroutines.
+758: </p>
+759: `,
+760:   },
+761: 
+762:   {
+763:     preface: `<p>Remember threads?</p>
+764: `,
+765:     code: `import asyncio
+766: from time import sleep
+767: 
+768: 
+769: def io_bound():
+770:     sleep(3)
+771:     print("done")
+772: 
+773: 
+774: async def main():
+775:     await asyncio.gather(
+776:         asyncio.to_thread(io_bound),
+777:         asyncio.to_thread(io_bound),
+778:     )
+779:     print("here")
+780: 
+781: 
+782: asyncio.run(main())
+783: `,
+784:     answers: [
+785:       `here
+786: <~3s>
+787: done
+788: done
+789: `,
+790:       `<~3s>
+791: done
+792: <~3s>
+793: done
+794: here
+795: `,
+796:       `<~3s>
+797: done
+798: done
+799: here
+800: `,
+801:     ],
+802:     correct: 2,
+803:     explanation: `<p>
+804:   <code>asyncio.to_thread()</code> is useful for async-unaware io-bound
+805:   functions.
+806: </p>
+807: 
+808: <p>It runs the passed function in a separate thread, returning a coroutine.</p>
+809: 
+810: <p>
+811:   <code>sleep()</code> releases the GIL so control can pass back to the main
+812:   thread.
+813: </p>
+814: `,
+815:   },
+816: 
+817:   {
+818:     preface: `<p>Know the differences between coroutines and tasks?</p>
+819: `,
+820:     code: `import asyncio
+821: 
+822: 
+823: async def foo():
+824:     print("in foo")
+825: 
+826: 
+827: async def main():
+828:     asyncio.create_task(foo())
+829:     print("in main")
+830: 
+831: 
+832: asyncio.run(main())
+833: `,
+834:     answers: [
+835:       `in foo
+836: in main
+837: `,
+838:       `in main
+839: in foo
+840: `,
+841:       `it depends
+842: `,
+843:     ],
+844:     correct: 1,
+845:     explanation: `<p><code>create_task()</code> schedules the task for execution.</p>
+846: 
+847: <p>But no <code>await</code>, so the main coroutine keeps control.</p>
+848: `,
+849:   },
+850: 
+851:   {
+852:     preface: `<p>How about this?</p>
+853: `,
+854:     code: `import asyncio
+855: 
+856: 
+857: async def foo():
+858:     print("in foo")
+859: 
+860: 
+861: async def main():
+862:     await asyncio.create_task(foo())
+863:     print("in main")
+864: 
+865: 
+866: asyncio.run(main())
+867: `,
+868:     answers: [
+869:       `it depends
+870: `,
+871:       `in main
+872: in foo
+873: `,
+874:       `in foo
+875: in main
+876: `,
+877:     ],
+878:     correct: 2,
+879:     explanation: `<p>Awaiting a task passes control to the event loop.</p>
+880: `,
+881:   },
+882: 
+883:   {
+884:     preface: `<p>And this?</p>
+885: `,
+886:     code: `import asyncio
+887: 
+888: 
+889: async def foo():
+890:     print("in foo")
+891: 
+892: 
+893: async def bar():
+894:     print("in bar")
+895: 
+896: 
+897: async def main():
+898:     asyncio.create_task(foo())
+899:     await bar()
+900: 
+901: 
+902: asyncio.run(main())
+903: `,
+904:     answers: [
+905:       `it depends
+906: `,
+907:       `in bar
+908: in foo
+909: `,
+910:       `in foo
+911: in bar
+912: `,
+913:     ],
+914:     correct: 1,
+915:     explanation: `<p>Awaiting a coroutine doesn't pass control to the event loop.</p>
+916: `,
+917:   },
+918: 
+919:   {
+920:     preface: `<p>Last one on this theme.</p>
+921: `,
+922:     code: `import asyncio
+923: 
+924: 
+925: async def foo():
+926:     print("in foo")
+927: 
+928: 
+929: async def bar():
+930:     print("in bar")
+931: 
+932: 
+933: async def main():
+934:     asyncio.create_task(foo())
+935:     await asyncio.create_task(bar())
+936: 
+937: 
+938: asyncio.run(main())
+939: `,
+940:     answers: [
+941:       `it depends
+942: `,
+943:       `in foo
+944: in bar
+945: `,
+946:       `in bar
+947: in foo
+948: `,
+949:     ],
+950:     correct: 1,
+951:     explanation: `<p>Awaiting a task passes control to the event loop.</p>
+952: `,
+953:   },
+954: 
+955:   {
+956:     preface: `<p>What if awaitables go bad?</p>
+957: `,
+958:     code: `import asyncio
+959: 
+960: 
+961: async def foo():
+962:     raise Exception
+963: 
+964: 
+965: async def bar():
+966:     await asyncio.sleep(3)
+967:     print("here")
+968: 
+969: 
+970: async def main():
+971:     await asyncio.gather(foo(), bar())
+972:     print("done")
+973: 
+974: 
+975: asyncio.run(main())
+976: `,
+977:     answers: [
+978:       `Traceback [...]
+979: Exception
+980: done
+981: `,
+982:       `Traceback [...]
+983: Exception
+984: `,
+985:       `<~3s>
+986: here
+987: done
+988: `,
+989:     ],
+990:     correct: 1,
+991:     explanation: `<p>
+992:   By default, <code>gather()</code> propagates the first raised exception, but
+993:   <em>doesn't</em> cancel its other awaitables.
+994: </p>
+995: <p>
+996:   However, when the exception propagates to <code>asyncio.run()</code>,
+997:   <em>it</em> cancels any remaining awaitables.
+998: </p>
+999: `,
+1000:   },
+1001: ];
+1002: 
+
+(End of file - total 1002 lines)
+</content>
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 14.1s)
+
+Now I have a clear picture of the issue. Let me analyze what I've found:
+
+## Current Situation Analysis
+
+**HTML Structure (lines 48-58):**
+- Answer buttons contain `<pre><samp>` elements to preserve whitespace formatting
+- The content is program output (often multi-line with timing annotations like `<~3s>`)
+
+**CSS Styling:**
+1. `#answers-row` uses `flex-direction: row` with `gap: var(--space-sm)` (line 328-333)
+2. Answer buttons have `flex: 1` and a fixed height based on `--max-answer-lines` (line 354)
+3. Mobile breakpoint at 480px sets `flex-wrap: wrap` and `flex: 1 1 100%` for buttons (lines 336-346)
+4. The main content area is limited to `max-width: 36rem` (~576px) (line 271)
+5. The `<pre>` inside buttons has `white-space: pre-wrap` (line 390)
+
+**The Problem:**
+- On desktop, with `max-width: 36rem` and three buttons sharing the space horizontally, each button gets roughly 180px width
+- Long answer lines (like `Exception in thread Thread-1 (bad):` which is ~35+ characters) wrap within the `<pre>` element
+- With `pre-wrap`, wrapped text combined with multi-line answers can exceed the fixed button height
+- The mobile breakpoint at 480px stacks buttons, but there's an intermediate range (481px-576px) where buttons are still horizontal but cramped
+
+Let me check if there are any particularly long answer lines:
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "grep -o '\"[^\"]*\"' /home/cosmo-grant/git/personal/python-concurrency-quiz/questions.js | grep -v '\\\\n' | awk '{print length, $0}' | sort -rn | head -20",
+  "description": "Find longest single-line strings in answers"
+}
+```
+
+**Output:**
+```
+10 "__main__"
+10 "__main__"
+10 "__main__"
+9 "in main"
+9 "in main"
+8 "in foo"
+8 "in foo"
+8 "in foo"
+8 "in foo"
+8 "in bar"
+8 "in bar"
+6 "here"
+6 "here"
+6 "here"
+6 "here"
+6 "here"
+6 "here"
+6 "here"
+6 "here"
+6 "here"
+
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 5.2s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "grep -E \"answers:\" -A 30 /home/cosmo-grant/git/personal/python-concurrency-quiz/questions.js | grep -E \"^\\s+\\`\" | sed 's/`//g' | awk -F'\\\\\\\\n' '{for(i=1;i<=NF;i++) print length($i), $i}' | sort -rn | head -20",
+  "description": "Find longest lines within answer strings"
+}
+```
+
+**Output:**
+```
+41       Exception in thread Thread-1 (bad):
+41       Exception in thread Thread-1 (bad):
+24       Process Process-1:
+24       Process Process-1:
+21       Traceback [...]
+21       Traceback [...]
+16       it depends
+16       it depends
+16       it depends
+16       it depends
+13       NOT ME!
+13       NOT ME!
+13       in main
+13       in main
+12       in foo
+12       in foo
+12       in foo
+12       in foo
+12       in bar
+12       in bar
+
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 228.8s)
+
+The longest line is `Exception in thread Thread-1 (bad):` at 41 characters. At a typical monospace font size of 0.9375rem (~15px) with average character width of ~9px, this needs about 369px - more than each button gets when split three ways in a 576px container.
+
+---
+
+## Proposed Solution
+
+Here's a robust plan addressing both desktop and mobile:
+
+### 1. **Increase max-width of main content area (Desktop)**
+
+Currently `max-width: 36rem` (576px). Increasing this to ~42-46rem would give buttons more horizontal space:
+- At 42rem (672px): each button gets ~216px
+- At 46rem (736px): each button gets ~236px
+
+This alone may not be enough for the 41-character line.
+
+### 2. **Raise the mobile breakpoint (Responsive)**
+
+Currently at 480px. Consider raising to ~600px or even ~700px so that vertical stacking kicks in earlier when horizontal space is tight.
+
+### 3. **Use CSS container queries or intrinsic sizing (Modern approach)**
+
+Instead of a fixed breakpoint, use `flex-wrap: wrap` always and let the buttons wrap naturally when they can't fit. Combined with a `min-width` on buttons, this provides fluid responsiveness.
+
+### 4. **Allow button height to be flexible (Overflow fix)**
+
+Currently buttons have a fixed height based on `--max-answer-lines`. Options:
+- Use `min-height` instead of `height` so content can grow
+- Ensure the longest content still fits
+
+---
+
+## Recommended Plan
+
+I recommend a combination approach:
+
+| Change | Rationale |
+|--------|-----------|
+| Increase `#main-content` max-width to ~44rem | More room for horizontal buttons on wider screens |
+| Raise breakpoint from 480px to ~640px | Stack buttons earlier on medium screens |
+| Change button `height` to `min-height` | Prevent overflow if content wraps |
+| Add `min-width` to buttons (~12rem) | Ensures buttons stack when too narrow |
+
+**Tool: question**
+
+**Input:**
+```json
+{
+  "questions": [
+    {
+      "question": "How would you like me to approach this fix?",
+      "header": "Solution approach",
+      "options": [
+        {
+          "label": "Combined approach (Recommended)",
+          "description": "Widen layout to ~44rem, raise breakpoint to ~640px, use min-height on buttons"
+        },
+        {
+          "label": "Desktop-focused",
+          "description": "Just widen the layout significantly (~50rem+) to avoid wrapping entirely"
+        },
+        {
+          "label": "Mobile-first / intrinsic",
+          "description": "Use flex-wrap always with min-width on buttons for natural responsive behavior"
+        },
+        {
+          "label": "Minimal changes",
+          "description": "Only change button height to min-height to prevent overflow"
+        }
+      ],
+      "multiple": false
+    }
+  ]
+}
+```
+
+**Output:**
+```
+User has answered your questions: "How would you like me to approach this fix?"="the combined approach sounds good. but i'm confused about something: you said the mobile breakpoint kicks in at 480px. but my mobile viewport is 411x749px and i see the buttons stacked horizontally. is that expected.". You can now continue with the user's answers in mind.
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 4.9s)
+
+Good catch! Let me investigate this further. There may be something preventing the mobile styles from applying correctly.
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "grep -n \"480px\\|max-width\\|min-width\" /home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "description": "Find all viewport breakpoints in CSS"
+}
+```
+
+**Output:**
+```
+209:  max-width: 46rem;
+218:  min-width: 1.75rem;
+258:@media (max-width: 480px) {
+271:  max-width: 36rem;
+336:@media (max-width: 480px) {
+476:@media (min-width: 481px) {
+544:  max-width: 24rem;
+
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 5.2s)
+
+I see the issue now. Looking at the CSS:
+
+- **Line 336**: `@media (max-width: 480px)` - this styles for screens **at most** 480px wide
+- Your device is 411px wide, which **is** under 480px
+
+So the stacking rule *should* apply. Let me re-read the CSS more carefully:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 335,
+  "limit": 15
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>335: /* Stack answer buttons on narrow screens */
+336: @media (max-width: 480px) {
+337:   #answers-row {
+338:     flex-wrap: wrap;
+339:   }
+340: 
+341:   #answer-0,
+342:   #answer-1,
+343:   #answer-2 {
+344:     flex: 1 1 100%;
+345:   }
+346: }
+347: 
+348: /* Base answer button styles */
+349: #answer-0,
+
+(File has more lines. Use 'offset' parameter to read beyond line 349)
+</content>
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 5.2s)
+
+The CSS looks correct. If your viewport is 411px wide and buttons are still horizontal, this is unexpected. Let me check:
+
+1. **Is the viewport meta tag present?** - Yes, I saw it: `<meta name="viewport" content="width=device-width, initial-scale=1" />` (line 5 of index.html)
+
+2. **Could there be CSS specificity issues?** Let me check if there are any other rules that might override:
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "grep -n \"flex-direction\\|flex-wrap\\|flex:\" /home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "description": "Check all flex-related rules"
+}
+```
+
+**Output:**
+```
+115:  flex-direction: column;
+206:  flex-wrap: nowrap;
+260:    flex-wrap: wrap;
+330:  flex-direction: row;
+338:    flex-wrap: wrap;
+344:    flex: 1 1 100%;
+352:  flex: 1;
+458:  flex: 1;
+484:    flex-direction: column;
+492:    flex: 1;
+518:  flex-direction: column;
+
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 6.7s)
+
+Looking at the structure:
+- Line 330: `#answers-row` has `flex-direction: row` (default)
+- Line 338: Inside media query, `#answers-row` gets `flex-wrap: wrap`
+- Line 344: Buttons get `flex: 1 1 100%`
+
+The issue is: `flex-wrap: wrap` + `flex: 1 1 100%` should stack buttons vertically. However, the **base** rule at line 352 sets `flex: 1` which is shorthand for `flex: 1 1 0%`.
+
+**The problem**: CSS specificity. Both rules target the same selectors (`#answer-0, #answer-1, #answer-2`). The media query rule (line 341-345) comes **before** the base rule (line 349-369). In CSS, when specificity is equal, the **last** rule wins.
+
+Let me verify:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 348,
+  "limit": 25
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>348: /* Base answer button styles */
+349: #answer-0,
+350: #answer-1,
+351: #answer-2 {
+352:   flex: 1;
+353:   /* Fixed height based on max answer lines */
+354:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+355:   padding: var(--space-sm) var(--space-md);
+356:   border: 2px solid var(--color-border);
+357:   border-radius: 4px;
+358:   background-color: var(--color-bg);
+359:   color: var(--color-text);
+360:   text-align: left;
+361:   cursor: pointer;
+362:   transition:
+363:     background-color 0.1s,
+364:     border-color 0.1s,
+365:     color 0.1s;
+366:   /* Top-align content */
+367:   display: flex;
+368:   align-items: flex-start;
+369: }
+370: 
+371: #answer-0:hover:not(:disabled),
+372: #answer-1:hover:not(:disabled),
+
+(File has more lines. Use 'offset' parameter to read beyond line 372)
+</content>
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 8.1s)
+
+**Found the bug!** 
+
+The media query with `flex: 1 1 100%` (line 344) comes **before** the base rule with `flex: 1` (line 352). Since both have the same specificity, the base rule overwrites the media query rule, making the mobile stacking ineffective.
+
+---
+
+## Updated Plan
+
+The fix needs to:
+
+1. **Fix the CSS ordering bug** - Move the mobile media query **after** the base button styles, or nest the `flex` property correctly
+2. **Widen the main content area** - Increase `max-width` from 36rem to ~44rem
+3. **Raise the breakpoint** - From 480px to ~640px for earlier stacking
+4. **Use `min-height` instead of `height`** - Prevent content overflow
+
+### Summary of Changes:
+
+| File | Change |
+|------|--------|
+| `styles.css` line 271 | Change `max-width: 36rem` to `max-width: 44rem` |
+| `styles.css` lines 336-346 | Move this media query block to **after** line 369 (after the base button styles) |
+| `styles.css` line 336 | Change breakpoint from `480px` to `640px` |
+| `styles.css` line 354 | Change `height` to `min-height` |
+
+Does this plan look good to proceed with once we exit read-only mode?
+
+---
+
+## User
+
+yes
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.4s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+      "status": "in_progress",
+      "priority": "high"
+    },
+    {
+      "content": "Widen main content area from 36rem to 44rem",
+      "status": "pending",
+      "priority": "high"
+    },
+    {
+      "content": "Raise mobile breakpoint from 480px to 640px",
+      "status": "pending",
+      "priority": "high"
+    },
+    {
+      "content": "Change button height to min-height to prevent overflow",
+      "status": "pending",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+    "status": "in_progress",
+    "priority": "high"
+  },
+  {
+    "content": "Widen main content area from 36rem to 44rem",
+    "status": "pending",
+    "priority": "high"
+  },
+  {
+    "content": "Raise mobile breakpoint from 480px to 640px",
+    "status": "pending",
+    "priority": "high"
+  },
+  {
+    "content": "Change button height to min-height to prevent overflow",
+    "status": "pending",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.4s)
+
+Let me make all the changes. First, I'll remove the misplaced mobile media query (lines 335-346), then add it back in the correct location after the base button styles:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Stack answer buttons on narrow screens */\n@media (max-width: 480px) {\n  #answers-row {\n    flex-wrap: wrap;\n  }\n\n  #answer-0,\n  #answer-1,\n  #answer-2 {\n    flex: 1 1 100%;\n  }\n}\n\n/* Base answer button styles */",
+  "newString": "/* Base answer button styles */"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 0.5s)
+
+---
+
+## User
+
+go step by step
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.3s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Widen main content area from 36rem to 44rem",
+      "status": "in_progress",
+      "priority": "high"
+    },
+    {
+      "content": "Raise mobile breakpoint from 480px to 640px",
+      "status": "pending",
+      "priority": "high"
+    },
+    {
+      "content": "Change button height to min-height to prevent overflow",
+      "status": "pending",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Widen main content area from 36rem to 44rem",
+    "status": "in_progress",
+    "priority": "high"
+  },
+  {
+    "content": "Raise mobile breakpoint from 480px to 640px",
+    "status": "pending",
+    "priority": "high"
+  },
+  {
+    "content": "Change button height to min-height to prevent overflow",
+    "status": "pending",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.8s)
+
+Now widen the main content area:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "  max-width: 36rem;",
+  "newString": "  max-width: 44rem;"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.0s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Widen main content area from 36rem to 44rem",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Raise mobile breakpoint from 480px to 640px",
+      "status": "in_progress",
+      "priority": "high"
+    },
+    {
+      "content": "Change button height to min-height to prevent overflow",
+      "status": "pending",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Widen main content area from 36rem to 44rem",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Raise mobile breakpoint from 480px to 640px",
+    "status": "in_progress",
+    "priority": "high"
+  },
+  {
+    "content": "Change button height to min-height to prevent overflow",
+    "status": "pending",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.1s)
+
+Now I need to change the button `height` to `min-height` and add the mobile media query (with 640px breakpoint) after the base button styles. Let me first read the current state to find the right location:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 335,
+  "limit": 60
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>335: /* Base answer button styles */
+336: #answer-0,
+337: #answer-1,
+338: #answer-2 {
+339:   flex: 1;
+340:   /* Fixed height based on max answer lines */
+341:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+342:   padding: var(--space-sm) var(--space-md);
+343:   border: 2px solid var(--color-border);
+344:   border-radius: 4px;
+345:   background-color: var(--color-bg);
+346:   color: var(--color-text);
+347:   text-align: left;
+348:   cursor: pointer;
+349:   transition:
+350:     background-color 0.1s,
+351:     border-color 0.1s,
+352:     color 0.1s;
+353:   /* Top-align content */
+354:   display: flex;
+355:   align-items: flex-start;
+356: }
+357: 
+358: #answer-0:hover:not(:disabled),
+359: #answer-1:hover:not(:disabled),
+360: #answer-2:hover:not(:disabled) {
+361:   border-color: var(--color-primary);
+362: }
+363: 
+364: #answer-0:disabled,
+365: #answer-1:disabled,
+366: #answer-2:disabled {
+367:   cursor: default;
+368: }
+369: 
+370: /* Answer button text (preserve whitespace for output formatting) */
+371: #answer-0 pre,
+372: #answer-1 pre,
+373: #answer-2 pre {
+374:   margin: 0;
+375:   font-family: var(--font-mono);
+376:   font-size: 0.9375rem;
+377:   white-space: pre-wrap;
+378: }
+379: 
+380: /* Selected answer (the one user clicked) - bold border */
+381: #answer-0.selected,
+382: #answer-1.selected,
+383: #answer-2.selected {
+384:   border-width: 3px;
+385:   border-color: var(--color-text);
+386: }
+387: 
+388: /* Correct answer - green */
+389: #answer-0.correct,
+390: #answer-1.correct,
+391: #answer-2.correct {
+392:   border-color: var(--color-correct);
+393:   background-color: var(--color-correct);
+394:   color: #ffffff;
+
+(File has more lines. Use 'offset' parameter to read beyond line 394)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.2s)
+
+Now let me change `height` to `min-height`:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);",
+  "newString": "  /* Minimum height based on max answer lines */\n  min-height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.8s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Widen main content area from 36rem to 44rem",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Raise mobile breakpoint from 480px to 640px",
+      "status": "in_progress",
+      "priority": "high"
+    },
+    {
+      "content": "Change button height to min-height to prevent overflow",
+      "status": "completed",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Widen main content area from 36rem to 44rem",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Raise mobile breakpoint from 480px to 640px",
+    "status": "in_progress",
+    "priority": "high"
+  },
+  {
+    "content": "Change button height to min-height to prevent overflow",
+    "status": "completed",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.8s)
+
+Now I need to add the mobile media query in the correct location. Let me read more to find where the answer button styles end:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 390,
+  "limit": 30
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>390: #answer-1.correct,
+391: #answer-2.correct {
+392:   border-color: var(--color-correct);
+393:   background-color: var(--color-correct);
+394:   color: #ffffff;
+395: }
+396: 
+397: /* Selected + correct: green background, bold border */
+398: #answer-0.selected.correct,
+399: #answer-1.selected.correct,
+400: #answer-2.selected.correct {
+401:   border-color: var(--color-text);
+402: }
+403: 
+404: /* -------------------------------------------
+405:    Explanation Section
+406:    ------------------------------------------- */
+407: 
+408: #explanation-section {
+409:   margin: var(--space-lg) 0;
+410: }
+411: 
+412: #explanation-text {
+413:   line-height: var(--line-height);
+414: }
+415: 
+416: #explanation-text p {
+417:   margin: 0 0 var(--space-sm) 0;
+418: }
+419: 
+
+(File has more lines. Use 'offset' parameter to read beyond line 419)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.9s)
+
+I'll add the mobile media query right after line 402 (after the selected+correct styles and before the Explanation Section):
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Selected + correct: green background, bold border */\n#answer-0.selected.correct,\n#answer-1.selected.correct,\n#answer-2.selected.correct {\n  border-color: var(--color-text);\n}\n\n/* -------------------------------------------\n   Explanation Section\n   ------------------------------------------- */",
+  "newString": "/* Selected + correct: green background, bold border */\n#answer-0.selected.correct,\n#answer-1.selected.correct,\n#answer-2.selected.correct {\n  border-color: var(--color-text);\n}\n\n/* Stack answer buttons on narrow screens */\n@media (max-width: 640px) {\n  #answers-row {\n    flex-wrap: wrap;\n  }\n\n  #answer-0,\n  #answer-1,\n  #answer-2 {\n    flex: 1 1 100%;\n  }\n}\n\n/* -------------------------------------------\n   Explanation Section\n   ------------------------------------------- */"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.0s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Widen main content area from 36rem to 44rem",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Raise mobile breakpoint from 480px to 640px",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Change button height to min-height to prevent overflow",
+      "status": "completed",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Fix CSS ordering bug - move mobile media query after base button styles",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Widen main content area from 36rem to 44rem",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Raise mobile breakpoint from 480px to 640px",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Change button height to min-height to prevent overflow",
+    "status": "completed",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.7s)
+
+Now let me run the formatter to ensure consistent styling:
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 67ms (unchanged)
+hljs-theme.css 51ms (unchanged)
+index.html 73ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 65ms (unchanged)
+questions/01/explanation.html 2ms (unchanged)
+questions/01/preface.html 1ms (unchanged)
+questions/02/explanation.html 2ms (unchanged)
+questions/02/preface.html 2ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 2ms (unchanged)
+questions/04/preface.html 1ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 2ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 1ms (unchanged)
+questions/15/explanation.html 2ms (unchanged)
+questions/15/preface.html 1ms (unchanged)
+questions/16/explanation.html 2ms (unchanged)
+questions/16/preface.html 2ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 1ms (unchanged)
+questions/20/explanation.html 1ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 1ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 1ms (unchanged)
+questions/22/preface.html 2ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 88ms (unchanged)
+README.md 11ms (unchanged)
+styles.css 59ms
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 6.8s)
+
+The formatter ran successfully and only modified `styles.css`. All changes complete. Here's a summary of what was fixed:
+
+## Summary of Changes
+
+| Change | Description |
+|--------|-------------|
+| **Fixed CSS ordering bug** | Moved the mobile media query from before to after the base button styles so it actually takes effect |
+| **Widened layout** | Increased `#main-content` max-width from 36rem to 44rem for more horizontal space on desktop |
+| **Raised breakpoint** | Changed from 480px to 640px so buttons stack vertically earlier on medium screens |
+| **Flexible button height** | Changed `height` to `min-height` so buttons can grow if content wraps |
+
+Your mobile device (411px) should now correctly show vertically stacked answer buttons, and desktop will have more room for horizontal buttons before they need to wrap.
+
+---
+
+## User
+
+i commmitted the css ordering fix. about the other changes, i'm thinking maybe it's better to revert and just stop the answer button text wrapping. what do you think?
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 13.6s)
+
+That's a reasonable alternative approach. Let me think through the tradeoffs:
+
+## Option A: Current changes (wider layout + higher breakpoint + min-height)
+**Pros:**
+- Buttons can show more content naturally
+- Works well across all screen sizes
+
+**Cons:**
+- More invasive changes
+- Layout shifts on different screens
+
+## Option B: Prevent text wrapping (`white-space: nowrap` or similar)
+**Pros:**
+- Simpler, single change
+- All buttons stay same height
+- Clean, consistent appearance
+
+**Cons:**
+- Long lines will overflow horizontally (need `overflow-x: auto` or truncation)
+- On mobile with stacked buttons, users may need to scroll horizontally within each button
+
+---
+
+The key question is: **what should happen when text is too long for the button?**
+
+Looking at the longest answer text (`Exception in thread Thread-1 (bad):` at 41 chars), this is output that users need to read to answer the question. Truncating it would be problematic.
+
+I think **Option B with horizontal scroll** could work well:
+- Set `white-space: pre` (or `nowrap`) on the button's `<pre>` element
+- Add `overflow-x: auto` to allow horizontal scrolling within the button if needed
+
+This keeps buttons uniform height, and on the rare long-line cases, users can scroll. On mobile (stacked buttons), each button is full-width so scrolling would rarely be needed anyway.
+
+**One consideration:** Currently the CSS has `white-space: pre-wrap` on `#answer-0 pre` etc (line 377). Changing to `pre` or `nowrap` would prevent wrapping. But do you still want the 640px breakpoint for stacking on mobile, or revert to 480px?
+
+What's your preference:
+1. Revert all changes, just use `white-space: pre` with `overflow-x: auto`
+2. Keep the 640px breakpoint (stacks earlier), but use `white-space: pre` instead of widening layout
+
+---
+
+## User
+
+1
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 8.7s)
+
+Got it. Let me plan the revert and the new approach.
+
+## Plan
+
+### Step 1: Revert the three non-committed changes
+
+The CSS ordering fix is already committed. I need to revert:
+
+1. **`max-width: 44rem`** → back to `max-width: 36rem`
+2. **`min-height`** → back to `height`
+3. **Remove the new 640px media query** (the one I added after the answer button styles)
+
+### Step 2: Change `white-space: pre-wrap` to `white-space: pre`
+
+In `styles.css` around line 377, change:
+```css
+#answer-0 pre,
+#answer-1 pre,
+#answer-2 pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  white-space: pre-wrap;  /* change to: pre */
+}
+```
+
+### Step 3: Add `overflow-x: auto` to allow horizontal scrolling
+
+Add `overflow-x: auto` to the same rule so long content can scroll horizontally within the button.
+
+---
+
+That's 4 edits total. Does this plan look right to you?
+
+---
+
+## User
+
+i did step 1 for you. go from step 2
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.7s)
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 368,
+  "limit": 15
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>368: }
+369: 
+370: /* Answer button text (preserve whitespace for output formatting) */
+371: #answer-0 pre,
+372: #answer-1 pre,
+373: #answer-2 pre {
+374:   margin: 0;
+375:   font-family: var(--font-mono);
+376:   font-size: 0.9375rem;
+377:   white-space: pre-wrap;
+378: }
+379: 
+380: /* Selected answer (the one user clicked) - bold border */
+381: #answer-0.selected,
+382: #answer-1.selected,
+
+(File has more lines. Use 'offset' parameter to read beyond line 382)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.6s)
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre-wrap;\n}",
+  "newString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n  overflow-x: auto;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.8s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 70ms (unchanged)
+hljs-theme.css 55ms (unchanged)
+index.html 70ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 63ms (unchanged)
+questions/01/explanation.html 2ms (unchanged)
+questions/01/preface.html 1ms (unchanged)
+questions/02/explanation.html 3ms (unchanged)
+questions/02/preface.html 2ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 3ms (unchanged)
+questions/04/preface.html 2ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 2ms (unchanged)
+questions/08/explanation.html 2ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 2ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 1ms (unchanged)
+questions/15/explanation.html 1ms (unchanged)
+questions/15/preface.html 1ms (unchanged)
+questions/16/explanation.html 2ms (unchanged)
+questions/16/preface.html 2ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 2ms (unchanged)
+questions/20/explanation.html 2ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 2ms (unchanged)
+questions/22/preface.html 2ms (unchanged)
+questions/23/explanation.html 3ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 89ms (unchanged)
+README.md 13ms (unchanged)
+styles.css 59ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.1s)
+
+Done. Changed `white-space: pre-wrap` to `white-space: pre` and added `overflow-x: auto` so long answer text won't wrap but can scroll horizontally if needed.
+
+---
+
+## User
+
+not working. the answer buttons are just wider for long text. no scrolling option.
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.3s)
+
+Let me investigate the issue. The `overflow-x: auto` is on the `<pre>` element, but the parent button may be expanding to accommodate it.
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 315,
+  "limit": 65
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>315:   line-height: 1.6;
+316:   overflow-x: auto;
+317: }
+318: 
+319: pre {
+320:   margin: 0;
+321: }
+322: 
+323: /* -------------------------------------------
+324:    Answer Buttons
+325:    ------------------------------------------- */
+326: 
+327: /* Container for answer buttons and next button */
+328: #answers-row {
+329:   display: flex;
+330:   flex-direction: row;
+331:   gap: var(--space-sm);
+332:   margin: var(--space-lg) 0;
+333: }
+334: 
+335: /* Base answer button styles */
+336: #answer-0,
+337: #answer-1,
+338: #answer-2 {
+339:   flex: 1;
+340:   /* Fixed height based on max answer lines */
+341:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+342:   padding: var(--space-sm) var(--space-md);
+343:   border: 2px solid var(--color-border);
+344:   border-radius: 4px;
+345:   background-color: var(--color-bg);
+346:   color: var(--color-text);
+347:   text-align: left;
+348:   cursor: pointer;
+349:   transition:
+350:     background-color 0.1s,
+351:     border-color 0.1s,
+352:     color 0.1s;
+353:   /* Top-align content */
+354:   display: flex;
+355:   align-items: flex-start;
+356: }
+357: 
+358: #answer-0:hover:not(:disabled),
+359: #answer-1:hover:not(:disabled),
+360: #answer-2:hover:not(:disabled) {
+361:   border-color: var(--color-primary);
+362: }
+363: 
+364: #answer-0:disabled,
+365: #answer-1:disabled,
+366: #answer-2:disabled {
+367:   cursor: default;
+368: }
+369: 
+370: /* Answer button text (preserve whitespace for output formatting) */
+371: #answer-0 pre,
+372: #answer-1 pre,
+373: #answer-2 pre {
+374:   margin: 0;
+375:   font-family: var(--font-mono);
+376:   font-size: 0.9375rem;
+377:   white-space: pre;
+378:   overflow-x: auto;
+379: }
+
+(File has more lines. Use 'offset' parameter to read beyond line 379)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 8.8s)
+
+I see the problem. The buttons have `flex: 1` which makes them share space equally, but nothing constrains them from growing beyond their share. The `<pre>` inside has `overflow-x: auto`, but it needs a constrained width to trigger scrolling.
+
+The fix: add `overflow: hidden` (or `overflow-x: auto`) to the button itself, and add `min-width: 0` to allow flex items to shrink below their content size.
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Top-align content */\n  display: flex;\n  align-items: flex-start;\n}",
+  "newString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Top-align content */\n  display: flex;\n  align-items: flex-start;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.2s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 68ms (unchanged)
+hljs-theme.css 50ms (unchanged)
+index.html 73ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 66ms (unchanged)
+questions/01/explanation.html 3ms (unchanged)
+questions/01/preface.html 2ms (unchanged)
+questions/02/explanation.html 3ms (unchanged)
+questions/02/preface.html 2ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 2ms (unchanged)
+questions/04/preface.html 2ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 2ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 2ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 2ms (unchanged)
+questions/15/explanation.html 1ms (unchanged)
+questions/15/preface.html 2ms (unchanged)
+questions/16/explanation.html 2ms (unchanged)
+questions/16/preface.html 1ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 2ms (unchanged)
+questions/20/explanation.html 2ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 1ms (unchanged)
+questions/22/preface.html 1ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 90ms (unchanged)
+README.md 13ms (unchanged)
+styles.css 59ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.1s)
+
+Done. Added `min-width: 0` to the answer buttons. 
+
+This is a common flexbox quirk - by default, flex items have `min-width: auto`, which prevents them from shrinking smaller than their content. Setting `min-width: 0` allows the button to respect its `flex: 1` sizing, and then the `overflow-x: auto` on the inner `<pre>` will trigger horizontal scrolling when the content is wider than the button.
+
+Try it now - the buttons should stay equal width and long text should scroll horizontally.
+
+---
+
+## User
+
+actually, let's also make the layout wider, like we did before.
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.9s)
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 265,
+  "limit": 15
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>265: /* -------------------------------------------
+266:    Main Content Layout
+267:    ------------------------------------------- */
+268: 
+269: #main-content {
+270:   position: relative;
+271:   max-width: 36rem;
+272:   margin: 0 auto;
+273:   padding: 0.75rem var(--space-lg) var(--space-lg);
+274: }
+275: 
+276: /* Preface text (question prompt) */
+277: #preface-text {
+278:   margin-bottom: var(--space-md);
+279: }
+
+(File has more lines. Use 'offset' parameter to read beyond line 279)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.3s)
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "  max-width: 36rem;",
+  "newString": "  max-width: 44rem;"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.2s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 70ms (unchanged)
+hljs-theme.css 50ms (unchanged)
+index.html 71ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 63ms (unchanged)
+questions/01/explanation.html 2ms (unchanged)
+questions/01/preface.html 1ms (unchanged)
+questions/02/explanation.html 2ms (unchanged)
+questions/02/preface.html 2ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 2ms (unchanged)
+questions/04/preface.html 2ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 2ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 1ms (unchanged)
+questions/08/preface.html 2ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 1ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 1ms (unchanged)
+questions/15/explanation.html 2ms (unchanged)
+questions/15/preface.html 1ms (unchanged)
+questions/16/explanation.html 2ms (unchanged)
+questions/16/preface.html 1ms (unchanged)
+questions/17/explanation.html 2ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 1ms (unchanged)
+questions/20/explanation.html 2ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 1ms (unchanged)
+questions/22/preface.html 1ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 90ms (unchanged)
+README.md 11ms (unchanged)
+styles.css 58ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.5s)
+
+Done. Widened `#main-content` from 36rem to 44rem. Now you have:
+
+1. Wider layout (44rem) giving more room for horizontal buttons on desktop
+2. `min-width: 0` on buttons so they respect flex sizing
+3. `white-space: pre` + `overflow-x: auto` on the `<pre>` inside buttons for horizontal scrolling on long text
+
+---
+
+## User
+
+an odd thing: the scrollbar on long answer buttons is not at the bottom. is that expected?
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 7.6s)
+
+That's not expected. The scrollbar should be at the bottom of the `<pre>` element. Let me check the structure.
+
+Looking at the HTML (lines 48-58 of index.html):
+
+```html
+<button id="answer-0">
+  <pre><samp id="answer-0-text"></samp></pre>
+</button>
+```
+
+And the CSS - the button has:
+- `height: calc(...)` - fixed height
+- `display: flex` with `align-items: flex-start` - content aligns to top
+
+The `<pre>` inside has `overflow-x: auto`, but the `<pre>` itself may not be filling the full height of the button, so the scrollbar appears wherever the `<pre>` ends (after the text content), not at the bottom of the button.
+
+Let me check and fix this by making the `<pre>` fill the button height:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 370,
+  "limit": 15
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>370: }
+371: 
+372: /* Answer button text (preserve whitespace for output formatting) */
+373: #answer-0 pre,
+374: #answer-1 pre,
+375: #answer-2 pre {
+376:   margin: 0;
+377:   font-family: var(--font-mono);
+378:   font-size: 0.9375rem;
+379:   white-space: pre;
+380:   overflow-x: auto;
+381: }
+382: 
+383: /* Selected answer (the one user clicked) - bold border */
+384: #answer-0.selected,
+
+(File has more lines. Use 'offset' parameter to read beyond line 384)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.6s)
+
+The issue is that the `<pre>` only takes up as much height as its content. I need to make it fill the button. Since the button uses `display: flex`, I can add `align-self: stretch` or set explicit height. But actually, the simplest fix is to move the `overflow-x: auto` to the button itself instead of the `<pre>`:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 335,
+  "limit": 50
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>335: /* Base answer button styles */
+336: #answer-0,
+337: #answer-1,
+338: #answer-2 {
+339:   flex: 1;
+340:   /* Allow flex items to shrink below content size */
+341:   min-width: 0;
+342:   /* Fixed height based on max answer lines */
+343:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+344:   padding: var(--space-sm) var(--space-md);
+345:   border: 2px solid var(--color-border);
+346:   border-radius: 4px;
+347:   background-color: var(--color-bg);
+348:   color: var(--color-text);
+349:   text-align: left;
+350:   cursor: pointer;
+351:   transition:
+352:     background-color 0.1s,
+353:     border-color 0.1s,
+354:     color 0.1s;
+355:   /* Top-align content */
+356:   display: flex;
+357:   align-items: flex-start;
+358: }
+359: 
+360: #answer-0:hover:not(:disabled),
+361: #answer-1:hover:not(:disabled),
+362: #answer-2:hover:not(:disabled) {
+363:   border-color: var(--color-primary);
+364: }
+365: 
+366: #answer-0:disabled,
+367: #answer-1:disabled,
+368: #answer-2:disabled {
+369:   cursor: default;
+370: }
+371: 
+372: /* Answer button text (preserve whitespace for output formatting) */
+373: #answer-0 pre,
+374: #answer-1 pre,
+375: #answer-2 pre {
+376:   margin: 0;
+377:   font-family: var(--font-mono);
+378:   font-size: 0.9375rem;
+379:   white-space: pre;
+380:   overflow-x: auto;
+381: }
+382: 
+383: /* Selected answer (the one user clicked) - bold border */
+384: #answer-0.selected,
+
+(File has more lines. Use 'offset' parameter to read beyond line 384)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 7.6s)
+
+I'll move `overflow-x: auto` from the `<pre>` to the button itself. This way the scrollbar will be at the bottom of the button:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Top-align content */\n  display: flex;\n  align-items: flex-start;\n}",
+  "newString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Horizontal scroll for long answer text */\n  overflow-x: auto;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.1s)
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n  overflow-x: auto;\n}",
+  "newString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.2s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 66ms (unchanged)
+hljs-theme.css 50ms (unchanged)
+index.html 71ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 63ms (unchanged)
+questions/01/explanation.html 2ms (unchanged)
+questions/01/preface.html 1ms (unchanged)
+questions/02/explanation.html 3ms (unchanged)
+questions/02/preface.html 1ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 2ms (unchanged)
+questions/04/preface.html 2ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 2ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 2ms (unchanged)
+questions/15/explanation.html 2ms (unchanged)
+questions/15/preface.html 1ms (unchanged)
+questions/16/explanation.html 1ms (unchanged)
+questions/16/preface.html 1ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 1ms (unchanged)
+questions/20/explanation.html 1ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 1ms (unchanged)
+questions/22/preface.html 2ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 97ms (unchanged)
+README.md 11ms (unchanged)
+styles.css 58ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.3s)
+
+Done. Moved `overflow-x: auto` from the `<pre>` to the button itself. Now the scrollbar should appear at the bottom of the button rather than right after the text content.
+
+---
+
+## User
+
+that fixed the scrollbar. but now the answer text is centered in the buttons. it should be at the top.
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.9s)
+
+You're right - I removed the `display: flex` and `align-items: flex-start` when I edited the button styles. Let me fix that:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 335,
+  "limit": 25
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>335: /* Base answer button styles */
+336: #answer-0,
+337: #answer-1,
+338: #answer-2 {
+339:   flex: 1;
+340:   /* Allow flex items to shrink below content size */
+341:   min-width: 0;
+342:   /* Fixed height based on max answer lines */
+343:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+344:   padding: var(--space-sm) var(--space-md);
+345:   border: 2px solid var(--color-border);
+346:   border-radius: 4px;
+347:   background-color: var(--color-bg);
+348:   color: var(--color-text);
+349:   text-align: left;
+350:   cursor: pointer;
+351:   transition:
+352:     background-color 0.1s,
+353:     border-color 0.1s,
+354:     color 0.1s;
+355:   /* Horizontal scroll for long answer text */
+356:   overflow-x: auto;
+357: }
+358: 
+359: #answer-0:hover:not(:disabled),
+
+(File has more lines. Use 'offset' parameter to read beyond line 359)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 6.0s)
+
+I see - the `display: flex` and `align-items: flex-start` got removed. But if I add them back, that will conflict with `overflow-x: auto` on the button (the scrollbar position issue). 
+
+A better approach is to use `vertical-align: top` on the `<pre>` inside, or use block-level alignment. Let me try adding `display: block` to the button (default for buttons) and using padding for top-alignment, which we already have. Actually, the simplest fix is to align the text to top using `vertical-align`:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 368,
+  "limit": 15
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>368:   cursor: default;
+369: }
+370: 
+371: /* Answer button text (preserve whitespace for output formatting) */
+372: #answer-0 pre,
+373: #answer-1 pre,
+374: #answer-2 pre {
+375:   margin: 0;
+376:   font-family: var(--font-mono);
+377:   font-size: 0.9375rem;
+378:   white-space: pre;
+379: }
+380: 
+381: /* Selected answer (the one user clicked) - bold border */
+382: #answer-0.selected,
+
+(File has more lines. Use 'offset' parameter to read beyond line 382)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.4s)
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n}",
+  "newString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n  vertical-align: top;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.6s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 69ms (unchanged)
+hljs-theme.css 53ms (unchanged)
+index.html 71ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 63ms (unchanged)
+questions/01/explanation.html 2ms (unchanged)
+questions/01/preface.html 1ms (unchanged)
+questions/02/explanation.html 3ms (unchanged)
+questions/02/preface.html 1ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 3ms (unchanged)
+questions/04/preface.html 1ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 2ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 1ms (unchanged)
+questions/15/explanation.html 1ms (unchanged)
+questions/15/preface.html 1ms (unchanged)
+questions/16/explanation.html 1ms (unchanged)
+questions/16/preface.html 2ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 1ms (unchanged)
+questions/20/explanation.html 2ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 2ms (unchanged)
+questions/22/preface.html 1ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 88ms (unchanged)
+README.md 11ms (unchanged)
+styles.css 58ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.1s)
+
+Done. Added `vertical-align: top` to the `<pre>` elements inside the answer buttons. The text should now align to the top while keeping the scrollbar at the bottom.
+
+---
+
+## User
+
+now working. still centered.
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.6s)
+
+Let me try a different approach. Since `vertical-align` works for inline/table elements and may not work here, I'll use a different technique - making the button use `display: block` and aligning content via the padding that's already there:
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "offset": 335,
+  "limit": 50
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css</path>
+<type>file</type>
+<content>335: /* Base answer button styles */
+336: #answer-0,
+337: #answer-1,
+338: #answer-2 {
+339:   flex: 1;
+340:   /* Allow flex items to shrink below content size */
+341:   min-width: 0;
+342:   /* Fixed height based on max answer lines */
+343:   height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+344:   padding: var(--space-sm) var(--space-md);
+345:   border: 2px solid var(--color-border);
+346:   border-radius: 4px;
+347:   background-color: var(--color-bg);
+348:   color: var(--color-text);
+349:   text-align: left;
+350:   cursor: pointer;
+351:   transition:
+352:     background-color 0.1s,
+353:     border-color 0.1s,
+354:     color 0.1s;
+355:   /* Horizontal scroll for long answer text */
+356:   overflow-x: auto;
+357: }
+358: 
+359: #answer-0:hover:not(:disabled),
+360: #answer-1:hover:not(:disabled),
+361: #answer-2:hover:not(:disabled) {
+362:   border-color: var(--color-primary);
+363: }
+364: 
+365: #answer-0:disabled,
+366: #answer-1:disabled,
+367: #answer-2:disabled {
+368:   cursor: default;
+369: }
+370: 
+371: /* Answer button text (preserve whitespace for output formatting) */
+372: #answer-0 pre,
+373: #answer-1 pre,
+374: #answer-2 pre {
+375:   margin: 0;
+376:   font-family: var(--font-mono);
+377:   font-size: 0.9375rem;
+378:   white-space: pre;
+379:   vertical-align: top;
+380: }
+381: 
+382: /* Selected answer (the one user clicked) - bold border */
+383: #answer-0.selected,
+384: #answer-1.selected,
+
+(File has more lines. Use 'offset' parameter to read beyond line 384)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 8.0s)
+
+The issue is that buttons have default styling that centers content vertically. Let me add `display: flex` with `align-items: flex-start` back, but also add `overflow-x: auto` to the inner `<pre>` instead of the button. Actually, let me try a cleaner approach - use `display: block` on the button explicitly:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Horizontal scroll for long answer text */\n  overflow-x: auto;\n}",
+  "newString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Block display for top alignment, horizontal scroll for long text */\n  display: block;\n  overflow-x: auto;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.0s)
+
+Also remove the `vertical-align: top` since it won't be needed with block display:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n  vertical-align: top;\n}",
+  "newString": "/* Answer button text (preserve whitespace for output formatting) */\n#answer-0 pre,\n#answer-1 pre,\n#answer-2 pre {\n  margin: 0;\n  font-family: var(--font-mono);\n  font-size: 0.9375rem;\n  white-space: pre;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.6s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 71ms (unchanged)
+hljs-theme.css 54ms (unchanged)
+index.html 75ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 66ms (unchanged)
+questions/01/explanation.html 2ms (unchanged)
+questions/01/preface.html 2ms (unchanged)
+questions/02/explanation.html 2ms (unchanged)
+questions/02/preface.html 2ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 3ms (unchanged)
+questions/04/preface.html 2ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 1ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 2ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 2ms (unchanged)
+questions/14/preface.html 1ms (unchanged)
+questions/15/explanation.html 2ms (unchanged)
+questions/15/preface.html 1ms (unchanged)
+questions/16/explanation.html 1ms (unchanged)
+questions/16/preface.html 1ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 1ms (unchanged)
+questions/20/explanation.html 2ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 2ms (unchanged)
+questions/22/preface.html 1ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 1ms (unchanged)
+quiz.js 95ms (unchanged)
+README.md 11ms (unchanged)
+styles.css 60ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.3s)
+
+Done. Changed the button to use `display: block` which should naturally align content to the top. Try it now - text should be at the top with the scrollbar at the bottom.
+
+---
+
+## User
+
+no. scrollbar at the bottom is good, but text still centered. think carefully
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 5.7s)
+
+Let me think about this more carefully.
+
+The issue is that `display: block` on a `<button>` element doesn't work the same as on a `<div>`. Buttons have special internal rendering that centers content vertically by default, and `display: block` doesn't override that behavior.
+
+Let me check what the original working CSS looked like:
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "git show HEAD:styles.css | sed -n '335,370p'",
+  "description": "View committed button styles"
+}
+```
+
+**Output:**
+```
+/* Base answer button styles */
+#answer-0,
+#answer-1,
+#answer-2 {
+  flex: 1;
+  /* Fixed height based on max answer lines */
+  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.1s,
+    border-color 0.1s,
+    color 0.1s;
+  /* Top-align content */
+  display: flex;
+  align-items: flex-start;
+}
+
+#answer-0:hover:not(:disabled),
+#answer-1:hover:not(:disabled),
+#answer-2:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+#answer-0:disabled,
+#answer-1:disabled,
+#answer-2:disabled {
+  cursor: default;
+}
+
+/* Answer button text (preserve whitespace for output formatting) */
+
+```
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 7.8s)
+
+I see - the original used `display: flex` with `align-items: flex-start` for top alignment. The problem is:
+
+1. We need `display: flex` + `align-items: flex-start` on the button for top alignment
+2. We need `overflow-x: auto` somewhere for horizontal scrolling
+3. When overflow is on the button with flex display, the scrollbar appears in the middle
+
+**The solution**: Keep `display: flex` + `align-items: flex-start` on the button, but put `overflow-x: auto` on the inner `<pre>`, and make the `<pre>` fill the full height of the button using `align-self: stretch` combined with `height: 100%`. This way:
+- The button's flex alignment keeps text at the top
+- The `<pre>` stretches to fill the button height
+- The scrollbar on the `<pre>` appears at the bottom of the `<pre>` (which is now the full button height)
+
+**Plan:**
+
+1. On buttons: restore `display: flex` + `align-items: flex-start`, remove `display: block` and `overflow-x: auto`
+2. On the `<pre>` inside buttons: add `overflow-x: auto`, `width: 100%`, and `height: 100%`
+
+Does this approach make sense to you?
+
+---
+
+## User
+
+seems pretty convoluted. is there a simpler approach?
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 9.7s)
+
+You're right, let me step back and think of simpler approaches.
+
+**The core problem**: We want text at top, scrollbar at bottom, in a fixed-height button.
+
+**Simpler alternatives**:
+
+1. **Use a wrapper `<div>` inside the button** - Change the HTML to add a wrapper div that handles the overflow, while the button handles the alignment. But this requires HTML changes.
+
+2. **Use `padding-bottom` instead of fixed height** - Remove fixed `height`, use only `padding`. Content naturally sits at top, but buttons would have different heights based on content.
+
+3. **Use CSS Grid instead of Flexbox** - `display: grid` with `align-content: start` might handle both alignment and overflow better.
+
+4. **Accept the tradeoff** - Keep text at top (with `display: flex` + `align-items: flex-start`) and accept that the scrollbar appears right after the text, not at the button bottom. This was actually working before, the scrollbar just wasn't at the very bottom of the button.
+
+**My recommendation**: Option 4 - go back to `display: flex` + `align-items: flex-start` on the button, put `overflow-x: auto` on the `<pre>`. The scrollbar will be right below the text, not at the button bottom, but that's a minor visual issue compared to centered text.
+
+What do you think?
+
+---
+
+## User
+
+the wrapper div sounds simple and achieves our aim. why do you prefer 4?
+
+---
+
+## Assistant (Plan · claude-opus-4-5 · 7.4s)
+
+You're right - the wrapper div is actually simple and achieves exactly what we want. I was overcomplicating it.
+
+**Plan: Add wrapper div inside buttons**
+
+### HTML change (index.html)
+
+Change from:
+```html
+<button id="answer-0">
+  <pre><samp id="answer-0-text"></samp></pre>
+</button>
+```
+
+To:
+```html
+<button id="answer-0">
+  <div class="answer-content">
+    <pre><samp id="answer-0-text"></samp></pre>
+  </div>
+</button>
+```
+
+(Same for answer-1 and answer-2)
+
+### CSS change (styles.css)
+
+1. On buttons: restore `display: flex` + `align-items: flex-start`, remove `display: block` and `overflow-x: auto`
+
+2. Add new rule for the wrapper:
+```css
+.answer-content {
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+}
+```
+
+This way:
+- Button uses flex to align content to top
+- Wrapper div fills the button and handles horizontal scrolling
+- Scrollbar appears at bottom of wrapper (= bottom of button)
+
+Does this plan look good?
+
+---
+
+## User
+
+yes
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 4.1s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Add wrapper div inside answer buttons in HTML",
+      "status": "in_progress",
+      "priority": "high"
+    },
+    {
+      "content": "Update CSS: restore flex on buttons, add .answer-content rule",
+      "status": "pending",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Add wrapper div inside answer buttons in HTML",
+    "status": "in_progress",
+    "priority": "high"
+  },
+  {
+    "content": "Update CSS: restore flex on buttons, add .answer-content rule",
+    "status": "pending",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.8s)
+
+**Tool: read**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/index.html",
+  "offset": 48,
+  "limit": 15
+}
+```
+
+**Output:**
+```
+<path>/home/cosmo-grant/git/personal/python-concurrency-quiz/index.html</path>
+<type>file</type>
+<content>48:       <div id="answers-row">
+49:         <button id="answer-0">
+50:           <pre><samp id="answer-0-text"></samp></pre>
+51:         </button>
+52:         <button id="answer-1">
+53:           <pre><samp id="answer-1-text"></samp></pre>
+54:         </button>
+55:         <button id="answer-2">
+56:           <pre><samp id="answer-2-text"></samp></pre>
+57:         </button>
+58:       </div>
+59: 
+60:       <div id="explanation-section">
+61:         <div id="explanation-text"></div>
+62:       </div>
+
+(File has more lines. Use 'offset' parameter to read beyond line 62)
+</content>
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.5s)
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/index.html",
+  "oldString": "      <div id=\"answers-row\">\n        <button id=\"answer-0\">\n          <pre><samp id=\"answer-0-text\"></samp></pre>\n        </button>\n        <button id=\"answer-1\">\n          <pre><samp id=\"answer-1-text\"></samp></pre>\n        </button>\n        <button id=\"answer-2\">\n          <pre><samp id=\"answer-2-text\"></samp></pre>\n        </button>\n      </div>",
+  "newString": "      <div id=\"answers-row\">\n        <button id=\"answer-0\">\n          <div class=\"answer-content\">\n            <pre><samp id=\"answer-0-text\"></samp></pre>\n          </div>\n        </button>\n        <button id=\"answer-1\">\n          <div class=\"answer-content\">\n            <pre><samp id=\"answer-1-text\"></samp></pre>\n          </div>\n        </button>\n        <button id=\"answer-2\">\n          <div class=\"answer-content\">\n            <pre><samp id=\"answer-2-text\"></samp></pre>\n          </div>\n        </button>\n      </div>"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.9s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Add wrapper div inside answer buttons in HTML",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Update CSS: restore flex on buttons, add .answer-content rule",
+      "status": "in_progress",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Add wrapper div inside answer buttons in HTML",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Update CSS: restore flex on buttons, add .answer-content rule",
+    "status": "in_progress",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 8.2s)
+
+Now update the CSS:
+
+**Tool: edit**
+
+**Input:**
+```json
+{
+  "filePath": "/home/cosmo-grant/git/personal/python-concurrency-quiz/styles.css",
+  "oldString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Block display for top alignment, horizontal scroll for long text */\n  display: block;\n  overflow-x: auto;\n}",
+  "newString": "/* Base answer button styles */\n#answer-0,\n#answer-1,\n#answer-2 {\n  flex: 1;\n  /* Allow flex items to shrink below content size */\n  min-width: 0;\n  /* Fixed height based on max answer lines */\n  height: calc(var(--max-answer-lines) * 0.9375rem * 1.6 + var(--space-sm) * 2);\n  padding: var(--space-sm) var(--space-md);\n  border: 2px solid var(--color-border);\n  border-radius: 4px;\n  background-color: var(--color-bg);\n  color: var(--color-text);\n  text-align: left;\n  cursor: pointer;\n  transition:\n    background-color 0.1s,\n    border-color 0.1s,\n    color 0.1s;\n  /* Top-align content */\n  display: flex;\n  align-items: flex-start;\n}\n\n/* Wrapper for answer text - enables horizontal scroll at button bottom */\n.answer-content {\n  width: 100%;\n  height: 100%;\n  overflow-x: auto;\n}"
+}
+```
+
+**Output:**
+```
+Edit applied successfully.
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 5.9s)
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "make format",
+  "description": "Format all files with ruff and prettier"
+}
+```
+
+**Output:**
+```
+uv tool run ruff format .
+26 files left unchanged
+npx prettier --write .
+AGENTS.md 68ms (unchanged)
+hljs-theme.css 53ms (unchanged)
+index.html 75ms (unchanged)
+questions-vars.css 3ms (unchanged)
+questions.js 64ms (unchanged)
+questions/01/explanation.html 3ms (unchanged)
+questions/01/preface.html 2ms (unchanged)
+questions/02/explanation.html 3ms (unchanged)
+questions/02/preface.html 1ms (unchanged)
+questions/03/explanation.html 2ms (unchanged)
+questions/03/preface.html 2ms (unchanged)
+questions/04/explanation.html 2ms (unchanged)
+questions/04/preface.html 1ms (unchanged)
+questions/05/explanation.html 3ms (unchanged)
+questions/05/preface.html 1ms (unchanged)
+questions/06/explanation.html 2ms (unchanged)
+questions/06/preface.html 2ms (unchanged)
+questions/07/explanation.html 2ms (unchanged)
+questions/07/preface.html 1ms (unchanged)
+questions/08/explanation.html 1ms (unchanged)
+questions/08/preface.html 1ms (unchanged)
+questions/09/explanation.html 2ms (unchanged)
+questions/09/preface.html 1ms (unchanged)
+questions/10/explanation.html 2ms (unchanged)
+questions/10/preface.html 1ms (unchanged)
+questions/11/explanation.html 2ms (unchanged)
+questions/11/preface.html 1ms (unchanged)
+questions/12/explanation.html 1ms (unchanged)
+questions/12/preface.html 1ms (unchanged)
+questions/13/explanation.html 2ms (unchanged)
+questions/13/preface.html 1ms (unchanged)
+questions/14/explanation.html 1ms (unchanged)
+questions/14/preface.html 2ms (unchanged)
+questions/15/explanation.html 1ms (unchanged)
+questions/15/preface.html 2ms (unchanged)
+questions/16/explanation.html 1ms (unchanged)
+questions/16/preface.html 1ms (unchanged)
+questions/17/explanation.html 3ms (unchanged)
+questions/17/preface.html 1ms (unchanged)
+questions/18/explanation.html 2ms (unchanged)
+questions/18/preface.html 1ms (unchanged)
+questions/19/explanation.html 2ms (unchanged)
+questions/19/preface.html 1ms (unchanged)
+questions/20/explanation.html 2ms (unchanged)
+questions/20/preface.html 1ms (unchanged)
+questions/21/explanation.html 2ms (unchanged)
+questions/21/preface.html 1ms (unchanged)
+questions/22/explanation.html 1ms (unchanged)
+questions/22/preface.html 1ms (unchanged)
+questions/23/explanation.html 2ms (unchanged)
+questions/23/preface.html 2ms (unchanged)
+quiz.js 89ms (unchanged)
+README.md 11ms (unchanged)
+styles.css 57ms (unchanged)
+
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.6s)
+
+**Tool: todowrite**
+
+**Input:**
+```json
+{
+  "todos": [
+    {
+      "content": "Add wrapper div inside answer buttons in HTML",
+      "status": "completed",
+      "priority": "high"
+    },
+    {
+      "content": "Update CSS: restore flex on buttons, add .answer-content rule",
+      "status": "completed",
+      "priority": "high"
+    }
+  ]
+}
+```
+
+**Output:**
+```
+[
+  {
+    "content": "Add wrapper div inside answer buttons in HTML",
+    "status": "completed",
+    "priority": "high"
+  },
+  {
+    "content": "Update CSS: restore flex on buttons, add .answer-content rule",
+    "status": "completed",
+    "priority": "high"
+  }
+]
+```
+
+---
+
+## Assistant (Build · claude-opus-4-5 · 3.8s)
+
+Done. Changes made:
+
+1. **HTML**: Added `<div class="answer-content">` wrapper inside each answer button
+2. **CSS**: Restored `display: flex` + `align-items: flex-start` on buttons, added `.answer-content` rule with `width/height: 100%` and `overflow-x: auto`
+
+Try it now - text should be at the top, scrollbar at the bottom.
+
+---
+

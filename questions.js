@@ -15,16 +15,16 @@ print("here")
     answers: [
       `NOT ME!
 `,
+      `NOT ME!
+`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
-      `NOT ME!
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>One process, one thread, no event loop.</p>
 
 <p>Simple. Slow.</p>
@@ -51,6 +51,12 @@ print("here")
 `,
     answers: [
       `<~3s>
+done
+<~3s>
+done
+here
+`,
+      `<~3s>
 here
 done
 done
@@ -60,14 +66,8 @@ done
 done
 done
 `,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>A thread runs only when it holds the Global Interpreter Lock.</p>
 
 <p>
@@ -105,7 +105,6 @@ print("here")
     answers: [
       `<~3s>
 done
-<~3s>
 done
 here
 `,
@@ -116,11 +115,12 @@ done
 `,
       `<~3s>
 done
+<~3s>
 done
 here
 `,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p><code>join()</code> blocks until the receiver completes.</p>
 `,
   },
@@ -148,12 +148,12 @@ print("here")
     answers: [
       `<~3s>
 done
+<~3s>
 done
 here
 `,
       `<~3s>
 done
-<~3s>
 done
 here
 `,
@@ -163,7 +163,7 @@ done
 done
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>
   <code>thread1.join()</code> blocks the main thread, but not
   <code>thread2</code>.
@@ -195,11 +195,6 @@ thread2.start()
 print("here")
 `,
     answers: [
-      `<~6s>
-done
-done
-here
-`,
       `here
 <~6s>
 done
@@ -210,8 +205,13 @@ done
 done
 done
 `,
+      `<~6s>
+done
+done
+here
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>
   The main thread runs when <code>thread1</code> and <code>thread2</code> are
   paused.
@@ -245,12 +245,6 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
       `here
 <~6s>
 done
@@ -261,8 +255,14 @@ done
 done
 here
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>Same as before: <code>join()</code> blocks until the receiver completes.</p>
 `,
   },
@@ -341,19 +341,19 @@ done
 done
 here
 `,
+      `<~6s>
+done
+done
+here
+`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
-      `<~6s>
-done
-done
-here
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>
   The interpreter doesn't pause a thread while it's running native code, like
   <code>sum()</code> does.
@@ -383,12 +383,12 @@ Traceback (most recent call last):
 Exception
 here
 `,
-      `here
-`,
       `Exception in thread Thread-1 (bad):
 Traceback (most recent call last):
   ...
 Exception
+`,
+      `here
 `,
     ],
     correct: 0,
@@ -430,16 +430,16 @@ if __name__ == "__main__":
 done
 done
 `,
-      `here
-<~3s>
-done
-done
-`,
       `<~3s>
 done
 <~3s>
 done
 here
+`,
+      `here
+<~3s>
+done
+done
 `,
     ],
     correct: 0,
@@ -481,17 +481,17 @@ here
 `,
       `<~3s>
 done
+<~3s>
 done
 here
 `,
       `<~3s>
 done
-<~3s>
 done
 here
 `,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>
   <code>thread1</code> and <code>thread2</code> are cpu-bound, so running in
   parallel helps.
@@ -560,11 +560,6 @@ asyncio.run(main())
 `,
     answers: [
       `here
-<~3s>
-done
-done
-`,
-      `here
 `,
       `<~3s>
 done
@@ -572,8 +567,13 @@ done
 done
 here
 `,
+      `here
+<~3s>
+done
+done
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>
   A function defined with <code>async def</code> is a coroutine function and
   returns a coroutine.
@@ -604,6 +604,12 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
       `here
 <~3s>
 done
@@ -614,14 +620,8 @@ done
 done
 here
 `,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>Awaiting a coroutine blocks until it completes.</p>
 
 <p>No speedup yet.</p>
@@ -648,12 +648,6 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `<~3s>
-here
-<~3s>
-here
-done
-`,
       `done
 <~3s>
 here
@@ -661,11 +655,17 @@ here
 `,
       `<~3s>
 here
+<~3s>
+here
+done
+`,
+      `<~3s>
+here
 here
 done
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>
   <code>await asyncio.sleep()</code> does pass control to the event loop, but
   there's no other work scheduled at that point.
@@ -734,24 +734,24 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
+      `<~3s>
+done
+done
+here
+`,
       `here
 <~3s>
 done
 done
 `,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
-      `<~3s>
-done
-done
-here
-`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>Speedup at last!</p>
 
 <p><code>asyncio</code> relies on async-aware functions.</p>
@@ -786,16 +786,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `here
+<~3s>
+done
+done
+`,
       `<~3s>
 done
 <~3s>
 done
 here
-`,
-      `here
-<~3s>
-done
-done
 `,
       `<~3s>
 done
@@ -838,14 +838,14 @@ asyncio.run(main())
     answers: [
       `it depends
 `,
-      `in main
-in foo
-`,
       `in foo
 in main
 `,
+      `in main
+in foo
+`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p><code>create_task()</code> schedules the task for execution.</p>
 
 <p>But no <code>await</code>, so the main coroutine keeps control.</p>
@@ -870,16 +870,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `in main
-in foo
-`,
       `it depends
 `,
       `in foo
 in main
 `,
+      `in main
+in foo
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>Awaiting a task passes control to the event loop.</p>
 `,
   },
@@ -906,16 +906,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `in bar
-in foo
-`,
-      `it depends
-`,
       `in foo
 in bar
 `,
+      `it depends
+`,
+      `in bar
+in foo
+`,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>Awaiting a coroutine doesn't pass control to the event loop.</p>
 `,
   },
@@ -942,16 +942,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `it depends
+`,
       `in bar
 in foo
 `,
       `in foo
 in bar
 `,
-      `it depends
-`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>Awaiting a task passes control to the event loop.</p>
 `,
   },
@@ -986,14 +986,14 @@ done
       `Traceback (most recent call last):
   ...
 Exception
-done
 `,
       `Traceback (most recent call last):
   ...
 Exception
+done
 `,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>
   By default, <code>gather()</code> propagates the first raised exception, but
   <em>doesn't</em> cancel its other awaitables.
