@@ -9,7 +9,7 @@ class Quiz {
       // offer user choice to continue or resume
       this.showContinueDialog();
       this.savedQuestionDialog.textContent = savedState.currentQuestion + 1;
-      this.savedScoreDialog = savedState.answers.filter(Boolean).length;
+      this.savedScoreDialog.textContent = savedState.answers.filter(Boolean).length;
       this.totalQuestionsDialog.textContent = QUESTIONS.length;
 
       this.continueFromSavedButton.addEventListener("click", () => {
