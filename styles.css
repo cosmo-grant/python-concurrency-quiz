@@ -189,6 +189,7 @@ body {
   color: var(--color-text);
   cursor: pointer;
   font-size: 0.875rem;
+  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
 }
 
 /* Disabled: future questions user hasn't reached yet */
@@ -316,6 +317,7 @@ pre {
   text-align: left;
   vertical-align: top;
   cursor: pointer;
+  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
 }
 
 #answer-0:hover:not(:disabled),
