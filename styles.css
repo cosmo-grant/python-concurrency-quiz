@@ -119,9 +119,39 @@ body {
   text-align: center;
 }
 
+/* Splash screen fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#splash-screen h1,
+#splash-screen p,
+#splash-screen button,
+#splash-screen footer {
+  opacity: 0;
+  animation: fadeIn 1s ease forwards;
+}
+
 #splash-screen h1 {
   margin: 0 0 var(--space-md) 0;
   font-size: 2rem;
+  animation-delay: 1.5s;
+}
+
+#splash-screen p:first-of-type {
+  font-size: 1.5rem;
+  animation-delay: 3s;
+}
+
+#splash-screen p:nth-of-type(2),
+#splash-screen button,
+#splash-screen footer {
+  animation-delay: 4.5s;
 }
 
 #splash-screen p {
@@ -189,7 +219,10 @@ body {
   color: var(--color-text);
   cursor: pointer;
   font-size: 0.875rem;
-  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+  transition:
+    background-color 0.1s,
+    border-color 0.1s,
+    color 0.1s;
 }
 
 /* Disabled: future questions user hasn't reached yet */
@@ -309,7 +342,10 @@ pre {
   color: var(--color-text);
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+  transition:
+    background-color 0.1s,
+    border-color 0.1s,
+    color 0.1s;
   /* Top-align content */
   display: flex;
   align-items: flex-start;
