@@ -87,6 +87,7 @@ class Quiz {
     this.continueDialog.hidden = false;
     this.mainContent.hidden = true;
     this.finalScoreSection.hidden = true;
+    this.navBar.hidden = true;
   }
 
   showSplashScreen() {
@@ -94,6 +95,7 @@ class Quiz {
     this.continueDialog.hidden = true;
     this.mainContent.hidden = true;
     this.finalScoreSection.hidden = true;
+    this.navBar.hidden = true;
   }
 
   showMainContent() {
@@ -101,6 +103,7 @@ class Quiz {
     this.continueDialog.hidden = true;
     this.mainContent.hidden = false;
     this.finalScoreSection.hidden = true;
+    this.navBar.hidden = false;
   }
 
   showFinalScoreSection() {
@@ -108,6 +111,7 @@ class Quiz {
     this.continueDialog.hidden = true;
     this.mainContent.hidden = true;
     this.finalScoreSection.hidden = false;
+    this.navBar.hidden = true;
   }
 
   setupEventListeners() {
