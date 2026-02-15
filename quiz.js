@@ -9,7 +9,7 @@ class Quiz {
       // offer user choice to continue or resume
       this.showContinueDialog();
       this.savedQuestionDialog.textContent = savedState.currentQuestion + 1;
-      this.savedScoreDialog.textContent = savedState.answers.filter(Boolean).length;
+      this.savedScoreDialog.textContent = savedState.answers.filter((selectedAnswer, questionIndex) => selectedAnswer === QUESTIONS[questionIndex].correct).length;
       this.totalQuestionsDialog.textContent = QUESTIONS.length;
 
       this.continueFromSavedButton.addEventListener("click", () => {
@@ -174,7 +174,7 @@ class Quiz {
   }
 
   computeScore() {
-    return this.answers.filter(Boolean).length;
+    return this.answers.filter((selectedAnswer, questionIndex) => selectedAnswer === QUESTIONS[questionIndex].correct).length;
   }
 
   updateScore() {
@@ -239,7 +239,7 @@ class Quiz {
 
     const question = QUESTIONS[this.currentQuestion];
     const correctIndex = question.correct;
-    this.answers[this.currentQuestion] = correctIndex === selectedIndex;
+    this.answers[this.currentQuestion] = selectedIndex;
     this.saveState();
     this.updateScore();
 
