@@ -281,7 +281,13 @@ class Quiz {
       this.answerButtons[question.correct].classList.add("correct");
       this.explanationText.innerHTML = question.explanation;
       this.explanationSection.style.display = "block";
-      this.nextButton.style.display = "block";
+      if (this.currentQuestion === QUESTIONS.length - 1) {
+        this.nextButton.style.display = "none";
+        this.finishButton.style.display = "block";
+      } else {
+        this.nextButton.style.display = "block";
+        this.finishButton.style.display = "none";
+      }
     }
   }
 
