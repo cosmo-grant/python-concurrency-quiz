@@ -337,7 +337,7 @@ class Quiz {
     this.finalScoreMax.textContent = QUESTIONS.length;
 
     let message = "";
-    const percentage = (this.score / QUESTIONS.length) * 100; // use % in case question count changes
+    const percentage = (this.computeScore() / QUESTIONS.length) * 100; // use % in case question count changes
 
     if (percentage === 100) {
       message = "&#x1f92f;";
