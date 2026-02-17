@@ -156,6 +156,9 @@ body {
 
 #splash-screen p {
   margin: 0 0 var(--space-md) 0;
+}
+
+#splash-screen p.muted {
   color: var(--color-text-muted);
 }
 
