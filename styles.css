@@ -527,6 +527,20 @@ pre {
   font-weight: bold;
 }
 
+#final-score-section a {
+  color: var(--color-primary);
+}
+
+#final-score-section a:hover {
+  color: var(--color-primary-hover);
+}
+
+#final-score-section p.anki-plug {
+  margin-top: var(--space-lg);
+  font-size: 1rem;
+  color: var(--color-text-muted);
+}
+
 /* -------------------------------------------
    Continue Dialog
    ------------------------------------------- */
