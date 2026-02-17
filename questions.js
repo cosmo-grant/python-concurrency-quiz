@@ -13,18 +13,18 @@ print("done")
 print("here")
 `,
     answers: [
-      `NOT ME!
-`,
-      `NOT ME!
-`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
+      `NOT ME!
+`,
+      `NOT ME!
+`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>One process, one thread, no event loop.</p>
 
 <p>Simple. Slow.</p>
@@ -50,24 +50,24 @@ thread2.start()
 print("here")
 `,
     answers: [
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
-      `<~3s>
-here
-done
-done
-`,
       `here
 <~3s>
 done
 done
 `,
+      `<~3s>
+here
+done
+done
+`,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>A thread runs only when it holds the Global Interpreter Lock.</p>
 
 <p>
@@ -108,19 +108,19 @@ done
 done
 here
 `,
-      `here
-<~3s>
-done
-done
-`,
       `<~3s>
 done
 <~3s>
 done
 here
 `,
+      `here
+<~3s>
+done
+done
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p><code>join()</code> blocks until the receiver completes.</p>
 `,
   },
@@ -148,12 +148,6 @@ print("here")
     answers: [
       `<~3s>
 done
-<~3s>
-done
-here
-`,
-      `<~3s>
-done
 done
 here
 `,
@@ -162,8 +156,14 @@ here
 done
 done
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>
   <code>thread1.join()</code> blocks the main thread, but not
   <code>thread2</code>.
@@ -196,12 +196,12 @@ print("here")
 `,
     answers: [
       `here
-<~6s>
+<~3s>
 done
 done
 `,
       `here
-<~3s>
+<~6s>
 done
 done
 `,
@@ -211,7 +211,7 @@ done
 here
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>
   The main thread runs when <code>thread1</code> and <code>thread2</code> are
   paused.
@@ -245,15 +245,15 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `here
-<~6s>
-done
-done
-`,
       `<~3s>
 done
 done
 here
+`,
+      `here
+<~6s>
+done
+done
 `,
       `<~3s>
 done
@@ -288,17 +288,17 @@ thread2.join()
 print("here")
 `,
     answers: [
-      `here
-<~3s>
-done
-<~3s>
-done
-`,
       `<~3s>
 done
 <~3s>
 done
 here
+`,
+      `here
+<~3s>
+done
+<~3s>
+done
 `,
       `<~6s>
 done
@@ -381,17 +381,17 @@ print("here")
 Traceback (most recent call last):
   ...
 Exception
-here
+`,
+      `here
 `,
       `Exception in thread Thread-1 (bad):
 Traceback (most recent call last):
   ...
 Exception
-`,
-      `here
+here
 `,
     ],
-    correct: 0,
+    correct: 2,
     explanation: `<p>
   <code>threading.excepthook()</code> prints on stderr an exception raised by
   <code>Thread.run()</code>.
@@ -426,6 +426,11 @@ if __name__ == "__main__":
 `,
     answers: [
       `here
+<~6s>
+done
+done
+`,
+      `here
 <~3s>
 done
 done
@@ -436,13 +441,8 @@ done
 done
 here
 `,
-      `here
-<~3s>
-done
-done
-`,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>Process objects run in separate processes, each with their own GIL.</p>
 
 <p>So they <em>can</em> run in parallel.</p>
@@ -481,17 +481,17 @@ here
 `,
       `<~3s>
 done
-<~3s>
 done
 here
 `,
       `<~3s>
 done
+<~3s>
 done
 here
 `,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p>
   <code>thread1</code> and <code>thread2</code> are cpu-bound, so running in
   parallel helps.
@@ -516,12 +516,12 @@ if __name__ == "__main__":
     print("here")
 `,
     answers: [
-      `here
-`,
       `Process Process-1:
 Traceback (most recent call last):
   ...
 Exception
+`,
+      `here
 `,
       `Process Process-1:
 Traceback (most recent call last):
@@ -559,8 +559,6 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `here
-`,
       `<~3s>
 done
 <~3s>
@@ -568,12 +566,14 @@ done
 here
 `,
       `here
+`,
+      `here
 <~3s>
 done
 done
 `,
     ],
-    correct: 0,
+    correct: 1,
     explanation: `<p>
   A function defined with <code>async def</code> is a coroutine function and
   returns a coroutine.
@@ -610,15 +610,15 @@ done
 done
 here
 `,
-      `here
-<~3s>
-done
-done
-`,
       `<~3s>
 done
 done
 here
+`,
+      `here
+<~3s>
+done
+done
 `,
     ],
     correct: 0,
@@ -695,11 +695,6 @@ asyncio.run(main())
     answers: [
       `<~3s>
 done
-done
-here
-`,
-      `<~3s>
-done
 <~3s>
 done
 here
@@ -709,8 +704,13 @@ here
 done
 done
 `,
+      `<~3s>
+done
+done
+here
+`,
     ],
-    correct: 1,
+    correct: 0,
     explanation: `<p>Still no speedup: <code>sleep()</code> blocks the one and only thread.</p>
 `,
   },
@@ -734,24 +734,24 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
-      `<~3s>
-done
-done
-here
-`,
       `here
 <~3s>
 done
 done
 `,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
+      `<~3s>
+done
+done
+here
+`,
     ],
-    correct: 1,
+    correct: 2,
     explanation: `<p>Speedup at last!</p>
 
 <p><code>asyncio</code> relies on async-aware functions.</p>
@@ -786,24 +786,24 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `<~3s>
+done
+done
+here
+`,
+      `<~3s>
+done
+<~3s>
+done
+here
+`,
       `here
 <~3s>
 done
 done
 `,
-      `<~3s>
-done
-<~3s>
-done
-here
-`,
-      `<~3s>
-done
-done
-here
-`,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>
   <code>asyncio.to_thread()</code> is useful for async-unaware io-bound
   functions.
@@ -836,16 +836,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `it depends
-`,
       `in foo
 in main
 `,
       `in main
 in foo
 `,
+      `it depends
+`,
     ],
-    correct: 2,
+    correct: 1,
     explanation: `<p><code>create_task()</code> schedules the task for execution.</p>
 
 <p>But no <code>await</code>, so the main coroutine keeps control.</p>
@@ -906,10 +906,10 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
+      `it depends
+`,
       `in foo
 in bar
-`,
-      `it depends
 `,
       `in bar
 in foo
@@ -942,16 +942,16 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `it depends
+      `in foo
+in bar
 `,
       `in bar
 in foo
 `,
-      `in foo
-in bar
+      `it depends
 `,
     ],
-    correct: 2,
+    correct: 0,
     explanation: `<p>Awaiting a task passes control to the event loop.</p>
 `,
   },
@@ -979,17 +979,17 @@ async def main():
 asyncio.run(main())
 `,
     answers: [
-      `<~3s>
-here
+      `Traceback (most recent call last):
+  ...
+Exception
 done
 `,
       `Traceback (most recent call last):
   ...
 Exception
 `,
-      `Traceback (most recent call last):
-  ...
-Exception
+      `<~3s>
+here
 done
 `,
     ],
