@@ -494,6 +494,7 @@ pre {
 }
 
 #restart-button {
+  margin-top: var(--space-md);
   padding: var(--space-sm) var(--space-lg);
   font-size: var(--font-size-base);
   color: #ffffff;
