@@ -34,7 +34,7 @@ Whether the power cuts out mid-execution.
 And more.
 
 Some snippets have comments asking you to assume this or that.
-Generally, assume a typical machine under normal conditions.
+Generally, assume a typical machine on a quiet day.
 I checked the snippets on a MacBook Pro M3.
 
 ## How did you check the snippets?
